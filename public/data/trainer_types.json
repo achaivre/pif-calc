@@ -1,0 +1,2522 @@
+{
+  "0": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "POKEMONTRAINER_Red",
+      "id_number": 0,
+      "real_name": "Pokémon Trainer",
+      "base_money": 60,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 60,
+      "skill_code": null
+    }
+  },
+  "POKEMONTRAINER_Red": {
+    "__ref__": "obj_2"
+  },
+  "1": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "POKEMONTRAINER_Leaf",
+      "id_number": 1,
+      "real_name": "Pokémon Trainer",
+      "base_money": 60,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 60,
+      "skill_code": null
+    }
+  },
+  "POKEMONTRAINER_Leaf": {
+    "__ref__": "obj_3"
+  },
+  "2": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "POKEMONTRAINER_Gold",
+      "id_number": 2,
+      "real_name": "Pokémon Trainer",
+      "base_money": 60,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 60,
+      "skill_code": null
+    }
+  },
+  "POKEMONTRAINER_Gold": {
+    "__ref__": "obj_4"
+  },
+  "3": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "POKEMONTRAINER_May",
+      "id_number": 3,
+      "real_name": "Pokémon Trainer",
+      "base_money": 60,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 60,
+      "skill_code": null
+    }
+  },
+  "POKEMONTRAINER_May": {
+    "__ref__": "obj_5"
+  },
+  "4": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "RIVAL1",
+      "id_number": 4,
+      "real_name": "Rival",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 16,
+      "skill_code": null
+    }
+  },
+  "RIVAL1": {
+    "__ref__": "obj_6"
+  },
+  "5": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "RIVAL2",
+      "id_number": 5,
+      "real_name": "Rival",
+      "base_money": 36,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 36,
+      "skill_code": null
+    }
+  },
+  "RIVAL2": {
+    "__ref__": "obj_7"
+  },
+  "6": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "AROMALADY",
+      "id_number": 6,
+      "real_name": "Aroma Lady",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "AROMALADY": {
+    "__ref__": "obj_8"
+  },
+  "7": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "BEAUTY",
+      "id_number": 7,
+      "real_name": "Beauty",
+      "base_money": 56,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 56,
+      "skill_code": null
+    }
+  },
+  "BEAUTY": {
+    "__ref__": "obj_9"
+  },
+  "8": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "BIKER",
+      "id_number": 8,
+      "real_name": "Biker",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "BIKER": {
+    "__ref__": "obj_10"
+  },
+  "9": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "BIRDKEEPER",
+      "id_number": 9,
+      "real_name": "Bird Keeper",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "BIRDKEEPER": {
+    "__ref__": "obj_11"
+  },
+  "10": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "BUGCATCHER",
+      "id_number": 10,
+      "real_name": "Bug Catcher",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 16,
+      "skill_code": null
+    }
+  },
+  "BUGCATCHER": {
+    "__ref__": "obj_12"
+  },
+  "11": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "BURGLAR",
+      "id_number": 11,
+      "real_name": "Burglar",
+      "base_money": 88,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "BURGLAR": {
+    "__ref__": "obj_13"
+  },
+  "12": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "CHANNELER",
+      "id_number": 12,
+      "real_name": "Channeler",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "CHANNELER": {
+    "__ref__": "obj_14"
+  },
+  "13": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "CUEBALL",
+      "id_number": 13,
+      "real_name": "Cue Ball",
+      "base_money": 24,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 24,
+      "skill_code": null
+    }
+  },
+  "CUEBALL": {
+    "__ref__": "obj_15"
+  },
+  "14": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "ENGINEER",
+      "id_number": 14,
+      "real_name": "Engineer",
+      "base_money": 48,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 48,
+      "skill_code": null
+    }
+  },
+  "ENGINEER": {
+    "__ref__": "obj_16"
+  },
+  "15": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "FISHERMAN",
+      "id_number": 15,
+      "real_name": "Fisherman",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "FISHERMAN": {
+    "__ref__": "obj_17"
+  },
+  "16": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "GAMBLER",
+      "id_number": 16,
+      "real_name": "Gambler",
+      "base_money": 72,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "GAMBLER": {
+    "__ref__": "obj_18"
+  },
+  "17": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "GENTLEMAN",
+      "id_number": 17,
+      "real_name": "Gentleman",
+      "base_money": 72,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 72,
+      "skill_code": null
+    }
+  },
+  "GENTLEMAN": {
+    "__ref__": "obj_19"
+  },
+  "18": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "HIKER",
+      "id_number": 18,
+      "real_name": "Hiker",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "HIKER": {
+    "__ref__": "obj_20"
+  },
+  "19": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "JUGGLER",
+      "id_number": 19,
+      "real_name": "Juggler",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "JUGGLER": {
+    "__ref__": "obj_21"
+  },
+  "20": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LADY",
+      "id_number": 20,
+      "real_name": "Lady",
+      "base_money": 160,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 72,
+      "skill_code": null
+    }
+  },
+  "LADY": {
+    "__ref__": "obj_22"
+  },
+  "21": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "PAINTER",
+      "id_number": 21,
+      "real_name": "Painter",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 16,
+      "skill_code": null
+    }
+  },
+  "PAINTER": {
+    "__ref__": "obj_23"
+  },
+  "22": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "POKEMANIAC",
+      "id_number": 22,
+      "real_name": "Poké Maniac",
+      "base_money": 64,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 64,
+      "skill_code": null
+    }
+  },
+  "POKEMANIAC": {
+    "__ref__": "obj_24"
+  },
+  "23": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "POKEMONBREEDER",
+      "id_number": 23,
+      "real_name": "Pokémon Breeder",
+      "base_money": 48,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 48,
+      "skill_code": null
+    }
+  },
+  "POKEMONBREEDER": {
+    "__ref__": "obj_25"
+  },
+  "24": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "PROFESSOR",
+      "id_number": 24,
+      "real_name": "Professor",
+      "base_money": 100,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "PROFESSOR": {
+    "__ref__": "obj_26"
+  },
+  "25": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "ROCKER",
+      "id_number": 25,
+      "real_name": "Rocker",
+      "base_money": 24,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 24,
+      "skill_code": null
+    }
+  },
+  "ROCKER": {
+    "__ref__": "obj_27"
+  },
+  "26": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "RUINMANIAC",
+      "id_number": 26,
+      "real_name": "Ruin Maniac",
+      "base_money": 48,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 48,
+      "skill_code": null
+    }
+  },
+  "RUINMANIAC": {
+    "__ref__": "obj_28"
+  },
+  "27": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "SAILOR",
+      "id_number": 27,
+      "real_name": "Sailor",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "SAILOR": {
+    "__ref__": "obj_29"
+  },
+  "28": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "SCIENTIST",
+      "id_number": 28,
+      "real_name": "Scientist",
+      "base_money": 48,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 48,
+      "skill_code": null
+    }
+  },
+  "SCIENTIST": {
+    "__ref__": "obj_30"
+  },
+  "29": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "SUPERNERD",
+      "id_number": 29,
+      "real_name": "Super Nerd",
+      "base_money": 48,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 48,
+      "skill_code": null
+    }
+  },
+  "SUPERNERD": {
+    "__ref__": "obj_31"
+  },
+  "30": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TAMER",
+      "id_number": 30,
+      "real_name": "Tamer",
+      "base_money": 40,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 40,
+      "skill_code": null
+    }
+  },
+  "TAMER": {
+    "__ref__": "obj_32"
+  },
+  "31": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "BLACKBELT",
+      "id_number": 31,
+      "real_name": "Black Belt",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "BLACKBELT": {
+    "__ref__": "obj_33"
+  },
+  "32": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "CRUSHGIRL",
+      "id_number": 32,
+      "real_name": "Crush Girl",
+      "base_money": 24,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 24,
+      "skill_code": null
+    }
+  },
+  "CRUSHGIRL": {
+    "__ref__": "obj_34"
+  },
+  "33": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "CAMPER",
+      "id_number": 33,
+      "real_name": "Camper",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 16,
+      "skill_code": null
+    }
+  },
+  "CAMPER": {
+    "__ref__": "obj_35"
+  },
+  "34": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "PICNICKER",
+      "id_number": 34,
+      "real_name": "Picnicker",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 16,
+      "skill_code": null
+    }
+  },
+  "PICNICKER": {
+    "__ref__": "obj_36"
+  },
+  "35": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "COOLTRAINER_M",
+      "id_number": 35,
+      "real_name": "Cool Trainer",
+      "base_money": 60,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 60,
+      "skill_code": null
+    }
+  },
+  "COOLTRAINER_M": {
+    "__ref__": "obj_37"
+  },
+  "36": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "COOLTRAINER_F",
+      "id_number": 36,
+      "real_name": "Cool Trainer",
+      "base_money": 60,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 60,
+      "skill_code": null
+    }
+  },
+  "COOLTRAINER_F": {
+    "__ref__": "obj_38"
+  },
+  "37": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "YOUNGSTER",
+      "id_number": 37,
+      "real_name": "Youngster",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 16,
+      "skill_code": null
+    }
+  },
+  "YOUNGSTER": {
+    "__ref__": "obj_39"
+  },
+  "38": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LASS",
+      "id_number": 38,
+      "real_name": "Lass",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 16,
+      "skill_code": null
+    }
+  },
+  "LASS": {
+    "__ref__": "obj_40"
+  },
+  "39": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "POKEMONRANGER_M",
+      "id_number": 39,
+      "real_name": "Pokémon Ranger",
+      "base_money": 60,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 60,
+      "skill_code": null
+    }
+  },
+  "POKEMONRANGER_M": {
+    "__ref__": "obj_41"
+  },
+  "40": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "POKEMONRANGER_F",
+      "id_number": 40,
+      "real_name": "Pokémon Ranger",
+      "base_money": 60,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 60,
+      "skill_code": null
+    }
+  },
+  "POKEMONRANGER_F": {
+    "__ref__": "obj_42"
+  },
+  "41": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "PSYCHIC_M",
+      "id_number": 41,
+      "real_name": "Psychic",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "PSYCHIC_M": {
+    "__ref__": "obj_43"
+  },
+  "42": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "PSYCHIC_F",
+      "id_number": 42,
+      "real_name": "Psychic",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "PSYCHIC_F": {
+    "__ref__": "obj_44"
+  },
+  "43": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "SWIMMER_M",
+      "id_number": 43,
+      "real_name": "Swimmer",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "SWIMMER_M": {
+    "__ref__": "obj_45"
+  },
+  "44": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "SWIMMER_F",
+      "id_number": 44,
+      "real_name": "Swimmer",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "SWIMMER_F": {
+    "__ref__": "obj_46"
+  },
+  "45": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "SWIMMER2_M",
+      "id_number": 45,
+      "real_name": "Swimmer",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "SWIMMER2_M": {
+    "__ref__": "obj_47"
+  },
+  "46": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "SWIMMER2_F",
+      "id_number": 46,
+      "real_name": "Swimmer",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "SWIMMER2_F": {
+    "__ref__": "obj_48"
+  },
+  "47": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TUBER_M",
+      "id_number": 47,
+      "real_name": "Tuber",
+      "base_money": 4,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 16,
+      "skill_code": null
+    }
+  },
+  "TUBER_M": {
+    "__ref__": "obj_49"
+  },
+  "48": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TUBER_F",
+      "id_number": 48,
+      "real_name": "Tuber",
+      "base_money": 4,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 16,
+      "skill_code": null
+    }
+  },
+  "TUBER_F": {
+    "__ref__": "obj_50"
+  },
+  "49": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TUBER2_M",
+      "id_number": 49,
+      "real_name": "Tuber",
+      "base_money": 4,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 16,
+      "skill_code": null
+    }
+  },
+  "TUBER2_M": {
+    "__ref__": "obj_51"
+  },
+  "50": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TUBER2_F",
+      "id_number": 50,
+      "real_name": "Tuber",
+      "base_money": 4,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 16,
+      "skill_code": null
+    }
+  },
+  "TUBER2_F": {
+    "__ref__": "obj_52"
+  },
+  "51": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "COOLCOUPLE",
+      "id_number": 51,
+      "real_name": "Cool Couple",
+      "base_money": 72,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 48,
+      "skill_code": null
+    }
+  },
+  "COOLCOUPLE": {
+    "__ref__": "obj_53"
+  },
+  "52": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "CRUSHKIN",
+      "id_number": 52,
+      "real_name": "Crush Kin",
+      "base_money": 48,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 48,
+      "skill_code": null
+    }
+  },
+  "CRUSHKIN": {
+    "__ref__": "obj_54"
+  },
+  "53": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "SISANDBRO",
+      "id_number": 53,
+      "real_name": "Sis and Bro",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 48,
+      "skill_code": null
+    }
+  },
+  "SISANDBRO": {
+    "__ref__": "obj_55"
+  },
+  "54": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TWINS",
+      "id_number": 54,
+      "real_name": "Twins",
+      "base_money": 24,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 24,
+      "skill_code": null
+    }
+  },
+  "TWINS": {
+    "__ref__": "obj_56"
+  },
+  "55": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "YOUNGCOUPLE",
+      "id_number": 55,
+      "real_name": "Young Couple",
+      "base_money": 60,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "YOUNGCOUPLE": {
+    "__ref__": "obj_57"
+  },
+  "56": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TEAMROCKET_M",
+      "id_number": 56,
+      "real_name": "Team Rocket",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "TEAMROCKET_M": {
+    "__ref__": "obj_58"
+  },
+  "57": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TEAMROCKET_F",
+      "id_number": 57,
+      "real_name": "Team Rocket",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "TEAMROCKET_F": {
+    "__ref__": "obj_59"
+  },
+  "58": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "ROCKETBOSS",
+      "id_number": 58,
+      "real_name": "Team Rocket Boss",
+      "base_money": 100,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "ROCKETBOSS": {
+    "__ref__": "obj_60"
+  },
+  "59": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LEADER_Brock",
+      "id_number": 59,
+      "real_name": "Gym Leader",
+      "base_money": 100,
+      "battle_BGM": "gymleader",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "LEADER_Brock": {
+    "__ref__": "obj_61"
+  },
+  "60": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LEADER_Misty",
+      "id_number": 60,
+      "real_name": "Gym Leader",
+      "base_money": 100,
+      "battle_BGM": "gymleader",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "LEADER_Misty": {
+    "__ref__": "obj_62"
+  },
+  "61": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LEADER_Surge",
+      "id_number": 61,
+      "real_name": "Gym Leader",
+      "base_money": 100,
+      "battle_BGM": "gymleader",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "LEADER_Surge": {
+    "__ref__": "obj_63"
+  },
+  "62": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LEADER_Erika",
+      "id_number": 62,
+      "real_name": "Gym Leader",
+      "base_money": 100,
+      "battle_BGM": "gymleader",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "LEADER_Erika": {
+    "__ref__": "obj_64"
+  },
+  "63": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LEADER_Koga",
+      "id_number": 63,
+      "real_name": "Gym Leader",
+      "base_money": 100,
+      "battle_BGM": "gymleader",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "LEADER_Koga": {
+    "__ref__": "obj_65"
+  },
+  "64": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LEADER_Sabrina",
+      "id_number": 64,
+      "real_name": "Gym Leader",
+      "base_money": 100,
+      "battle_BGM": "gymleader",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "LEADER_Sabrina": {
+    "__ref__": "obj_66"
+  },
+  "65": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LEADER_Blaine",
+      "id_number": 65,
+      "real_name": "Gym Leader",
+      "base_money": 100,
+      "battle_BGM": "gymleader",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "LEADER_Blaine": {
+    "__ref__": "obj_67"
+  },
+  "66": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LEADER_Giovanni",
+      "id_number": 66,
+      "real_name": "Gym Leader",
+      "base_money": 100,
+      "battle_BGM": "gymleader",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "LEADER_Giovanni": {
+    "__ref__": "obj_68"
+  },
+  "67": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "ELITEFOUR_Lorelei",
+      "id_number": 67,
+      "real_name": "Elite Four",
+      "base_money": 100,
+      "battle_BGM": "elite",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "ELITEFOUR_Lorelei": {
+    "__ref__": "obj_69"
+  },
+  "68": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "ELITEFOUR_Bruno",
+      "id_number": 68,
+      "real_name": "Elite Four",
+      "base_money": 100,
+      "battle_BGM": "elite",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "ELITEFOUR_Bruno": {
+    "__ref__": "obj_70"
+  },
+  "69": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "ELITEFOUR_Agatha",
+      "id_number": 69,
+      "real_name": "Elite Four",
+      "base_money": 100,
+      "battle_BGM": "elite",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "ELITEFOUR_Agatha": {
+    "__ref__": "obj_71"
+  },
+  "70": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "ELITEFOUR_Lance",
+      "id_number": 70,
+      "real_name": "Elite Four",
+      "base_money": 100,
+      "battle_BGM": "elite",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "ELITEFOUR_Lance": {
+    "__ref__": "obj_72"
+  },
+  "71": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "CHAMPION",
+      "id_number": 71,
+      "real_name": "Champion",
+      "base_money": 100,
+      "battle_BGM": "elite",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "CHAMPION": {
+    "__ref__": "obj_73"
+  },
+  "72": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "SOCIALITE",
+      "id_number": 72,
+      "real_name": "Socialite",
+      "base_money": 160,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 160,
+      "skill_code": null
+    }
+  },
+  "SOCIALITE": {
+    "__ref__": "obj_74"
+  },
+  "73": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "BUGCATCHER_F",
+      "id_number": 73,
+      "real_name": "Bug Catcher",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 16,
+      "skill_code": null
+    }
+  },
+  "BUGCATCHER_F": {
+    "__ref__": "obj_75"
+  },
+  "74": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "MR_FUJI",
+      "id_number": 74,
+      "real_name": "Mr.",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 16,
+      "skill_code": null
+    }
+  },
+  "MR_FUJI": {
+    "__ref__": "obj_76"
+  },
+  "75": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "ROUGHNECK",
+      "id_number": 75,
+      "real_name": "Roughneck",
+      "base_money": 24,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 24,
+      "skill_code": null
+    }
+  },
+  "ROUGHNECK": {
+    "__ref__": "obj_77"
+  },
+  "76": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TEACHER",
+      "id_number": 76,
+      "real_name": "Teacher",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "TEACHER": {
+    "__ref__": "obj_78"
+  },
+  "77": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "PRESCHOOLER_M",
+      "id_number": 77,
+      "real_name": "Preschooler",
+      "base_money": 4,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 16,
+      "skill_code": null
+    }
+  },
+  "PRESCHOOLER_M": {
+    "__ref__": "obj_79"
+  },
+  "78": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "PRESCHOOLER_F",
+      "id_number": 78,
+      "real_name": "Preschooler",
+      "base_money": 4,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 16,
+      "skill_code": null
+    }
+  },
+  "PRESCHOOLER_F": {
+    "__ref__": "obj_80"
+  },
+  "79": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "HIPSTER",
+      "id_number": 79,
+      "real_name": "Hipster",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "HIPSTER": {
+    "__ref__": "obj_81"
+  },
+  "80": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "HAUNTEDGIRL_YOUNG",
+      "id_number": 80,
+      "real_name": "Haunted Girl",
+      "base_money": 4,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 4,
+      "skill_code": null
+    }
+  },
+  "HAUNTEDGIRL_YOUNG": {
+    "__ref__": "obj_82"
+  },
+  "81": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "HAUNTEDGIRL",
+      "id_number": 81,
+      "real_name": "Haunted Girl",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "HAUNTEDGIRL": {
+    "__ref__": "obj_83"
+  },
+  "82": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "CLOWN",
+      "id_number": 82,
+      "real_name": "Clown",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "CLOWN": {
+    "__ref__": "obj_84"
+  },
+  "83": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "NURSE",
+      "id_number": 83,
+      "real_name": "Nurse",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "NURSE": {
+    "__ref__": "obj_85"
+  },
+  "84": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "WORKER",
+      "id_number": 84,
+      "real_name": "Worker",
+      "base_money": 88,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "WORKER": {
+    "__ref__": "obj_86"
+  },
+  "85": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "POKEMONTRAINER_RedB",
+      "id_number": 85,
+      "real_name": "Pokémon Trainer",
+      "base_money": 60,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 60,
+      "skill_code": null
+    }
+  },
+  "POKEMONTRAINER_RedB": {
+    "__ref__": "obj_87"
+  },
+  "86": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "POKEMONTRAINER_RedG",
+      "id_number": 86,
+      "real_name": "Pokémon Trainer",
+      "base_money": 60,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 60,
+      "skill_code": null
+    }
+  },
+  "POKEMONTRAINER_RedG": {
+    "__ref__": "obj_88"
+  },
+  "87": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "POKEMONTRAINER_RedY",
+      "id_number": 87,
+      "real_name": "Pokémon Trainer",
+      "base_money": 60,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 60,
+      "skill_code": null
+    }
+  },
+  "POKEMONTRAINER_RedY": {
+    "__ref__": "obj_89"
+  },
+  "88": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "POKEMONTRAINER_LeafB",
+      "id_number": 88,
+      "real_name": "Pokémon Trainer",
+      "base_money": 60,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 60,
+      "skill_code": null
+    }
+  },
+  "POKEMONTRAINER_LeafB": {
+    "__ref__": "obj_90"
+  },
+  "89": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "POKEMONTRAINER_LeafG",
+      "id_number": 89,
+      "real_name": "Pokémon Trainer",
+      "base_money": 60,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 60,
+      "skill_code": null
+    }
+  },
+  "POKEMONTRAINER_LeafG": {
+    "__ref__": "obj_91"
+  },
+  "90": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "POKEMONTRAINER_LeafY",
+      "id_number": 90,
+      "real_name": "Pokémon Trainer",
+      "base_money": 60,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 60,
+      "skill_code": null
+    }
+  },
+  "POKEMONTRAINER_LeafY": {
+    "__ref__": "obj_92"
+  },
+  "91": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "COOLTRAINER_M2",
+      "id_number": 91,
+      "real_name": "Cool Trainer",
+      "base_money": 0,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 255,
+      "skill_code": null
+    }
+  },
+  "COOLTRAINER_M2": {
+    "__ref__": "obj_93"
+  },
+  "92": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "COOLTRAINER_F2",
+      "id_number": 92,
+      "real_name": "Cool Trainer",
+      "base_money": 0,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 255,
+      "skill_code": null
+    }
+  },
+  "COOLTRAINER_F2": {
+    "__ref__": "obj_94"
+  },
+  "93": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "ROBOT",
+      "id_number": 93,
+      "real_name": "Robot",
+      "base_money": 0,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 255,
+      "skill_code": null
+    }
+  },
+  "ROBOT": {
+    "__ref__": "obj_95"
+  },
+  "94": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "FARMER",
+      "id_number": 94,
+      "real_name": "Farmer",
+      "base_money": 12,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 12,
+      "skill_code": null
+    }
+  },
+  "FARMER": {
+    "__ref__": "obj_96"
+  },
+  "95": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "PYROMANIAC",
+      "id_number": 95,
+      "real_name": "Pyromaniac",
+      "base_money": 88,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "PYROMANIAC": {
+    "__ref__": "obj_97"
+  },
+  "96": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "ROCKETEXEC_F",
+      "id_number": 96,
+      "real_name": "Team Rocket Executive",
+      "base_money": 100,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "ROCKETEXEC_F": {
+    "__ref__": "obj_98"
+  },
+  "97": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "ROCKETEXEC_M",
+      "id_number": 97,
+      "real_name": "Team Rocket Executive",
+      "base_money": 100,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "ROCKETEXEC_M": {
+    "__ref__": "obj_99"
+  },
+  "98": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LEADER_Whitney",
+      "id_number": 98,
+      "real_name": "Gym Leader",
+      "base_money": 100,
+      "battle_BGM": "gymleader",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "LEADER_Whitney": {
+    "__ref__": "obj_100"
+  },
+  "99": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LEADER_Kurt",
+      "id_number": 99,
+      "real_name": "Gym Leader",
+      "base_money": 100,
+      "battle_BGM": "gymleader",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "LEADER_Kurt": {
+    "__ref__": "obj_101"
+  },
+  "100": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LEADER_Falkner",
+      "id_number": 100,
+      "real_name": "Gym Leader",
+      "base_money": 100,
+      "battle_BGM": "gymleader",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "LEADER_Falkner": {
+    "__ref__": "obj_102"
+  },
+  "101": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LEADER_Clair",
+      "id_number": 101,
+      "real_name": "Gym Leader",
+      "base_money": 100,
+      "battle_BGM": "gymleader",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "LEADER_Clair": {
+    "__ref__": "obj_103"
+  },
+  "102": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "MYSTICALMAN",
+      "id_number": 102,
+      "real_name": "Tamer",
+      "base_money": 40,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 40,
+      "skill_code": null
+    }
+  },
+  "MYSTICALMAN": {
+    "__ref__": "obj_104"
+  },
+  "103": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LEADER_Morty",
+      "id_number": 103,
+      "real_name": "Gym Leader",
+      "base_money": 100,
+      "battle_BGM": "gymleader",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "LEADER_Morty": {
+    "__ref__": "obj_105"
+  },
+  "104": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TEAMPLASMA_M",
+      "id_number": 104,
+      "real_name": "Team Plasma",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "TEAMPLASMA_M": {
+    "__ref__": "obj_106"
+  },
+  "105": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TEAMPLASMA_F",
+      "id_number": 105,
+      "real_name": "Team Plasma",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "TEAMPLASMA_F": {
+    "__ref__": "obj_107"
+  },
+  "106": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "SCIENTIST_Colress",
+      "id_number": 106,
+      "real_name": "Scientist",
+      "base_money": 100,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "SCIENTIST_Colress": {
+    "__ref__": "obj_108"
+  },
+  "107": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LEADER_Pryce",
+      "id_number": 107,
+      "real_name": "Gym Leader",
+      "base_money": 100,
+      "battle_BGM": "gymleader",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "LEADER_Pryce": {
+    "__ref__": "obj_109"
+  },
+  "108": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "KIMONOGIRL",
+      "id_number": 108,
+      "real_name": "Kimono Girl",
+      "base_money": 0,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 255,
+      "skill_code": null
+    }
+  },
+  "KIMONOGIRL": {
+    "__ref__": "obj_110"
+  },
+  "109": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "SAGE",
+      "id_number": 109,
+      "real_name": "Sage",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "SAGE": {
+    "__ref__": "obj_111"
+  },
+  "110": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "PLAYER",
+      "id_number": 110,
+      "real_name": "Player",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "PLAYER": {
+    "__ref__": "obj_112"
+  },
+  "111": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LEADER_Chuck",
+      "id_number": 111,
+      "real_name": "Gym Leader",
+      "base_money": 100,
+      "battle_BGM": "gymleader",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "LEADER_Chuck": {
+    "__ref__": "obj_113"
+  },
+  "112": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LEADER_Jasmine",
+      "id_number": 112,
+      "real_name": "Gym Leader",
+      "base_money": 100,
+      "battle_BGM": "gymleader",
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "LEADER_Jasmine": {
+    "__ref__": "obj_114"
+  },
+  "113": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "POLICE",
+      "id_number": 113,
+      "real_name": "Officer",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "POLICE": {
+    "__ref__": "obj_115"
+  },
+  "114": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "SKIER_F",
+      "id_number": 114,
+      "real_name": "Skier",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "SKIER_F": {
+    "__ref__": "obj_116"
+  },
+  "115": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "CHAMPION_Sinnoh",
+      "id_number": 115,
+      "real_name": "Champion",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "CHAMPION_Sinnoh": {
+    "__ref__": "obj_117"
+  },
+  "116": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "SPRITER",
+      "id_number": 116,
+      "real_name": "Sprite Artist",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "SPRITER": {
+    "__ref__": "obj_118"
+  },
+  "117": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_NORMAL",
+      "id_number": 117,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_NORMAL": {
+    "__ref__": "obj_119"
+  },
+  "118": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_FIGHTING",
+      "id_number": 118,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_FIGHTING": {
+    "__ref__": "obj_120"
+  },
+  "119": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_FLYING",
+      "id_number": 119,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_FLYING": {
+    "__ref__": "obj_121"
+  },
+  "120": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_POISON",
+      "id_number": 120,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_POISON": {
+    "__ref__": "obj_122"
+  },
+  "121": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_GROUND",
+      "id_number": 121,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_GROUND": {
+    "__ref__": "obj_123"
+  },
+  "122": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_ROCK",
+      "id_number": 122,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_ROCK": {
+    "__ref__": "obj_124"
+  },
+  "123": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_BUG",
+      "id_number": 123,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_BUG": {
+    "__ref__": "obj_125"
+  },
+  "124": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_GHOST",
+      "id_number": 124,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_GHOST": {
+    "__ref__": "obj_126"
+  },
+  "125": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_STEEL",
+      "id_number": 125,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_STEEL": {
+    "__ref__": "obj_127"
+  },
+  "126": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_FIRE",
+      "id_number": 126,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_FIRE": {
+    "__ref__": "obj_128"
+  },
+  "127": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_WATER",
+      "id_number": 127,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_WATER": {
+    "__ref__": "obj_129"
+  },
+  "128": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_GRASS",
+      "id_number": 128,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_GRASS": {
+    "__ref__": "obj_130"
+  },
+  "129": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_ELECTRIC",
+      "id_number": 129,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_ELECTRIC": {
+    "__ref__": "obj_131"
+  },
+  "130": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_PSYCHIC",
+      "id_number": 130,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_PSYCHIC": {
+    "__ref__": "obj_132"
+  },
+  "131": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_ICE",
+      "id_number": 131,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_ICE": {
+    "__ref__": "obj_133"
+  },
+  "132": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_DRAGON",
+      "id_number": 132,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_DRAGON": {
+    "__ref__": "obj_134"
+  },
+  "133": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_DARK",
+      "id_number": 133,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_DARK": {
+    "__ref__": "obj_135"
+  },
+  "134": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "TYPE_EXPERT_FAIRY",
+      "id_number": 134,
+      "real_name": "Type Expert",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 2,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "TYPE_EXPERT_FAIRY": {
+    "__ref__": "obj_136"
+  },
+  "135": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "DELIVERYMAN",
+      "id_number": 135,
+      "real_name": "Delivery Man",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "DELIVERYMAN": {
+    "__ref__": "obj_137"
+  },
+  "136": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "ROCKETEXEC_Ariana",
+      "id_number": 136,
+      "real_name": "Team Rocket Executive",
+      "base_money": 100,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "ROCKETEXEC_Ariana": {
+    "__ref__": "obj_138"
+  },
+  "137": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "ROCKETEXEC_Archer",
+      "id_number": 137,
+      "real_name": "Team Rocket Executive",
+      "base_money": 100,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 100,
+      "skill_code": null
+    }
+  },
+  "ROCKETEXEC_Archer": {
+    "__ref__": "obj_139"
+  },
+  "138": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "LASS_blue",
+      "id_number": 138,
+      "real_name": "Lass",
+      "base_money": 16,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 1,
+      "skill_level": 16,
+      "skill_code": null
+    }
+  },
+  "LASS_blue": {
+    "__ref__": "obj_140"
+  },
+  "139": {
+    "__class__": "GameData::TrainerType",
+    "__ivars__": {
+      "id": "DELIVERYMAN2",
+      "id_number": 139,
+      "real_name": "Delivery Man",
+      "base_money": 32,
+      "battle_BGM": null,
+      "victory_ME": null,
+      "intro_ME": null,
+      "gender": 0,
+      "skill_level": 32,
+      "skill_code": null
+    }
+  },
+  "DELIVERYMAN2": {
+    "__ref__": "obj_141"
+  }
+}

@@ -1,0 +1,378 @@
+/**
+ * Bridge between PIF data and @smogon/calc.
+ */
+import { Generations, Pokemon, Move, Field, Side, calculate } from '@smogon/calc';
+import type { Weather, Terrain } from '@smogon/calc';
+import type {
+  PlayerPokemon,
+  PifTrainerPokemon,
+  SmogonStatSet,
+  FieldConditions,
+  MoveCalcResult,
+} from '../types/game';
+import { isFusion, DEFAULT_IVS } from '../types/game';
+import { loadSpecies, loadMoves, loadAbilities, loadItems, parseTrainerSpecies, getTypeEffectiveness } from './loaders';
+import { calcFusionStats, calcFusionTypes, pifToSmogonStats } from './fusionCalc';
+import {
+  getTrainerTier,
+  applyHardModeStatBoost,
+  generateEliteEVs,
+  generateEliteNature,
+  ELITE_IVS,
+} from './hardModeData';
+
+const GEN = Generations.get(7);
+
+function pifTypeToSmogon(t: string): string {
+  return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
+}
+
+// ---------------------------------------------------------------------------
+// Resolved trainer pokemon shape
+// ---------------------------------------------------------------------------
+
+export interface ResolvedTrainerPokemon {
+  displayName: string;
+  types: string[];
+  baseStats: SmogonStatSet;
+  ability: string;
+  abilityName: string;
+  abilityDescription: string;
+  item: string;
+  itemName: string;
+  itemDescription: string;
+  level: number;
+  nature: string;
+  ivs: SmogonStatSet;
+  evs: SmogonStatSet;
+  moves: string[];
+  tier: 'elite' | 'regular';
+}
+
+export async function resolveTrainerPokemon(
+  tp: PifTrainerPokemon,
+  trainerType: string
+): Promise<ResolvedTrainerPokemon> {
+  const { byId: speciesById, byNum: speciesByNum } = await loadSpecies();
+  const movesMap = await loadMoves();
+  const abilitiesMap = await loadAbilities();
+  const itemsMap = await loadItems();
+  const parsed = parseTrainerSpecies(tp.species);
+
+  const tier = getTrainerTier(trainerType);
+
+  let displayName: string;
+  let types: string[];
+  let baseStats: SmogonStatSet;
+  let abilityId = tp.ability ?? '';
+
+  if (parsed.kind === 'fusion') {
+    const head = speciesByNum.get(parsed.headNum);
+    const body = speciesByNum.get(parsed.bodyNum);
+    if (head && body) {
+      displayName = `${head.real_name} / ${body.real_name}`;
+      const [t1, t2] = calcFusionTypes(head, body);
+      types = t2 ? [pifTypeToSmogon(t1), pifTypeToSmogon(t2)] : [pifTypeToSmogon(t1)];
+      baseStats = calcFusionStats(head, body);
+      if (!abilityId && head.abilities.length > 0) abilityId = head.abilities[0];
+    } else {
+      displayName = tp.species;
+      types = ['Normal'];
+      baseStats = { hp: 50, atk: 50, def: 50, spa: 50, spd: 50, spe: 50 };
+    }
+  } else {
+    const species = speciesById.get(parsed.id);
+    if (species) {
+      displayName = species.real_name;
+      types = species.type2
+        ? [pifTypeToSmogon(species.type1), pifTypeToSmogon(species.type2)]
+        : [pifTypeToSmogon(species.type1)];
+      baseStats = pifToSmogonStats(species.base_stats);
+      if (!abilityId && species.abilities.length > 0) abilityId = species.abilities[0];
+    } else {
+      displayName = parsed.id;
+      types = ['Normal'];
+      baseStats = { hp: 50, atk: 50, def: 50, spa: 50, spd: 50, spe: 50 };
+    }
+  }
+
+  // Apply Hard Mode 10% stat boost
+  baseStats = applyHardModeStatBoost(baseStats);
+
+  // IVs and EVs — elite trainers get competitive spreads if not already specified
+  const hasEvData = tp.ev != null;
+  const ivs: SmogonStatSet = tp.iv
+    ? { hp: tp.iv.HP, atk: tp.iv.ATTACK, def: tp.iv.DEFENSE, spa: tp.iv.SPECIAL_ATTACK, spd: tp.iv.SPECIAL_DEFENSE, spe: tp.iv.SPEED }
+    : tier === 'elite' ? { ...ELITE_IVS } : { ...DEFAULT_IVS };
+
+  let evs: SmogonStatSet;
+  if (hasEvData && tp.ev) {
+    evs = { hp: tp.ev.HP, atk: tp.ev.ATTACK, def: tp.ev.DEFENSE, spa: tp.ev.SPECIAL_ATTACK, spd: tp.ev.SPECIAL_DEFENSE, spe: tp.ev.SPEED };
+  } else if (tier === 'elite') {
+    evs = generateEliteEVs(baseStats);
+  } else {
+    evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+  }
+
+  const moves: string[] = (tp.moves ?? []).map(mid => {
+    const m = movesMap.get(mid);
+    return m ? m.real_name : mid;
+  });
+
+  let nature = tp.nature ? tp.nature.charAt(0) + tp.nature.slice(1).toLowerCase() : '';
+  if (!nature || nature === 'Hardy') {
+    nature = tier === 'elite' ? generateEliteNature(baseStats, nature) : 'Hardy';
+  }
+
+  // Ability description
+  const abilityEntry = abilityId ? abilitiesMap.get(abilityId) : undefined;
+  const abilityName = abilityEntry?.real_name ?? abilityId;
+  const abilityDescription = abilityEntry?.real_description ?? '';
+
+  // Item description
+  const itemId = tp.item ?? '';
+  const itemEntry = itemId ? itemsMap.get(itemId) : undefined;
+  const itemName = itemEntry?.real_name ?? itemId;
+  const itemDescription = itemEntry?.real_description ?? '';
+
+  return {
+    displayName,
+    types,
+    baseStats,
+    ability: abilityId,
+    abilityName,
+    abilityDescription,
+    item: itemId,
+    itemName,
+    itemDescription,
+    level: tp.level,
+    nature,
+    ivs,
+    evs,
+    moves,
+    tier,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Build smogon Pokemon objects
+// ---------------------------------------------------------------------------
+
+async function buildSmogonPokemon(pp: PlayerPokemon): Promise<Pokemon> {
+  const { byId } = await loadSpecies();
+  let displayName = 'Bulbasaur';
+  let baseStats: SmogonStatSet;
+  let types: string[];
+
+  if (isFusion(pp.speciesId)) {
+    const head = byId.get(pp.speciesId.head);
+    const body = byId.get(pp.speciesId.body);
+    if (head && body) {
+      displayName = `${head.real_name} / ${body.real_name}`;
+      baseStats = calcFusionStats(head, body);
+      const [t1, t2] = calcFusionTypes(head, body);
+      types = t2 ? [pifTypeToSmogon(t1), pifTypeToSmogon(t2)] : [pifTypeToSmogon(t1)];
+    } else {
+      baseStats = { hp: 50, atk: 50, def: 50, spa: 50, spd: 50, spe: 50 };
+      types = ['Normal'];
+    }
+  } else {
+    const sp = byId.get(pp.speciesId);
+    if (sp) {
+      displayName = sp.real_name;
+      baseStats = pifToSmogonStats(sp.base_stats);
+      types = sp.type2 ? [pifTypeToSmogon(sp.type1), pifTypeToSmogon(sp.type2)] : [pifTypeToSmogon(sp.type1)];
+    } else {
+      baseStats = { hp: 50, atk: 50, def: 50, spa: 50, spd: 50, spe: 50 };
+      types = ['Normal'];
+    }
+  }
+
+  return new Pokemon(GEN, displayName, {
+    level: pp.level, nature: pp.nature, ability: pp.ability, item: pp.item,
+    ivs: pp.ivs, evs: pp.evs, overrides: { baseStats, types },
+  });
+}
+
+function buildSmogonPokemonFromResolved(r: ResolvedTrainerPokemon): Pokemon {
+  return new Pokemon(GEN, r.displayName.split(' / ')[0] || 'Bulbasaur', {
+    level: r.level, nature: r.nature, ability: r.ability, item: r.itemName || r.item,
+    ivs: r.ivs, evs: r.evs, overrides: { baseStats: r.baseStats, types: r.types },
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Build Field
+// ---------------------------------------------------------------------------
+
+function buildField(f: FieldConditions): Field {
+  return new Field({
+    weather: (f.weather ?? undefined) as Weather | undefined,
+    terrain: (f.terrain ?? undefined) as Terrain | undefined,
+    isGravity: f.isGravity,
+    isMagicRoom: f.isMagicRoom,
+    isWonderRoom: f.isWonderRoom,
+    attackerSide: new Side({ isReflect: f.attackerSide.isReflect, isLightScreen: f.attackerSide.isLightScreen, isAuroraVeil: f.attackerSide.isAuroraVeil, isTailwind: f.attackerSide.isTailwind, isSR: f.attackerSide.isSR, spikes: f.attackerSide.spikes }),
+    defenderSide: new Side({ isReflect: f.defenderSide.isReflect, isLightScreen: f.defenderSide.isLightScreen, isAuroraVeil: f.defenderSide.isAuroraVeil, isTailwind: f.defenderSide.isTailwind, isSR: f.defenderSide.isSR, spikes: f.defenderSide.spikes }),
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Helpers: build calc results from a smogon calc
+// ---------------------------------------------------------------------------
+
+async function calcMoveDamage(
+  attacker: Pokemon,
+  defender: Pokemon,
+  field: Field,
+  movesMap: Map<string, import('../types/game').PifMoveData>,
+  moveIds: string[],
+  defenderTypes: string[]
+): Promise<MoveCalcResult[]> {
+  const results: MoveCalcResult[] = [];
+
+  for (const moveId of moveIds.filter(Boolean)) {
+    const pifMove = movesMap.get(moveId);
+    if (!pifMove) continue;
+
+    const isStatus = pifMove.category === 2 || pifMove.base_damage === 0;
+    const category = pifMove.category === 0 ? 'Physical' : pifMove.category === 1 ? 'Special' : 'Status';
+    const moveType = pifMove.type.toUpperCase();
+
+    // Type effectiveness
+    const effectiveness = await getTypeEffectiveness(moveType, defenderTypes);
+
+    if (isStatus) {
+      results.push({
+        moveId,
+        moveName: pifMove.real_name,
+        damageMin: 0,
+        damageMax: 0,
+        koText: '',
+        desc: pifMove.real_description || pifMove.real_name,
+        isStatus: true,
+        effectiveness,
+        moveType,
+      });
+      continue;
+    }
+
+    const moveOverrides = {
+      basePower: pifMove.base_damage,
+      type: pifTypeToSmogon(pifMove.type),
+      category: category as 'Physical' | 'Special' | 'Status',
+    };
+
+    let smogonMove: Move | null = null;
+    try {
+      smogonMove = new Move(GEN, pifMove.real_name, { overrides: moveOverrides });
+    } catch {
+      try {
+        smogonMove = new Move(GEN, 'Tackle', { overrides: moveOverrides });
+      } catch {
+        smogonMove = null;
+      }
+    }
+
+    if (!smogonMove) {
+      results.push({ moveId, moveName: pifMove.real_name, damageMin: 0, damageMax: 0, koText: '', desc: pifMove.real_name, isStatus: false, effectiveness, moveType });
+      continue;
+    }
+
+    try {
+      const result = calculate(GEN, attacker, defender, smogonMove, field);
+      const [minDmg, maxDmg] = result.range();
+      const defHP = defender.maxHP();
+      results.push({
+        moveId,
+        moveName: pifMove.real_name,
+        damageMin: parseFloat(((minDmg / defHP) * 100).toFixed(1)),
+        damageMax: parseFloat(((maxDmg / defHP) * 100).toFixed(1)),
+        koText: result.kochance().text,
+        desc: result.desc(),
+        isStatus: false,
+        effectiveness,
+        moveType,
+      });
+    } catch {
+      results.push({ moveId, moveName: pifMove.real_name, damageMin: 0, damageMax: 0, koText: '', desc: `${pifMove.real_name} — calc error`, isStatus: false, effectiveness: 1, moveType });
+    }
+  }
+
+  return results;
+}
+
+// ---------------------------------------------------------------------------
+// Main calc: player Pokemon → enemy
+// ---------------------------------------------------------------------------
+
+export async function runCalc(
+  attackerPP: PlayerPokemon,
+  defenderResolved: ResolvedTrainerPokemon,
+  fieldConditions: FieldConditions
+): Promise<MoveCalcResult[]> {
+  const movesMap = await loadMoves();
+  const attacker = await buildSmogonPokemon(attackerPP);
+  const defender = buildSmogonPokemonFromResolved(defenderResolved);
+  const field = buildField(fieldConditions);
+
+  // defender types in PIF uppercase for type effectiveness checks
+  const defenderTypes = defenderResolved.types.map(t => t.toUpperCase());
+
+  return calcMoveDamage(attacker, defender, field, movesMap, attackerPP.moves, defenderTypes);
+}
+
+// ---------------------------------------------------------------------------
+// Reverse calc: enemy Pokemon → player Pokemon
+// ---------------------------------------------------------------------------
+
+export async function runReverseCalc(
+  enemyResolved: ResolvedTrainerPokemon,
+  defenderPP: PlayerPokemon,
+  fieldConditions: FieldConditions
+): Promise<MoveCalcResult[]> {
+  const movesMap = await loadMoves();
+  const attacker = buildSmogonPokemonFromResolved(enemyResolved);
+  const defender = await buildSmogonPokemon(defenderPP);
+
+  // Swap sides: enemy attacks first, so attacker/defender sides flip
+  const flippedField = buildField({
+    ...fieldConditions,
+    attackerSide: fieldConditions.defenderSide,
+    defenderSide: fieldConditions.attackerSide,
+  });
+
+  // Look up enemy move IDs from real names via the moves map
+  const movesById = movesMap;
+  const movesByRealName = new Map<string, string>();
+  for (const [id, m] of movesById.entries()) {
+    movesByRealName.set(m.real_name.toLowerCase(), id);
+  }
+
+  // Convert enemy move names (real names) back to IDs for lookup
+  const enemyMoveIds = enemyResolved.moves.map(name => {
+    const id = movesByRealName.get(name.toLowerCase());
+    return id ?? name; // fallback to name if not found
+  });
+
+  // Defender types for the player's Pokemon
+  const { byId } = await loadSpecies();
+  let defenderTypes: string[] = ['NORMAL'];
+  if (isFusion(defenderPP.speciesId)) {
+    const head = byId.get(defenderPP.speciesId.head);
+    const body = byId.get(defenderPP.speciesId.body);
+    if (head && body) {
+      const [t1, t2] = calcFusionTypes(head, body);
+      defenderTypes = t2 ? [t1.toUpperCase(), t2.toUpperCase()] : [t1.toUpperCase()];
+    }
+  } else {
+    const sp = byId.get(defenderPP.speciesId);
+    if (sp) {
+      defenderTypes = sp.type2
+        ? [sp.type1.toUpperCase(), sp.type2.toUpperCase()]
+        : [sp.type1.toUpperCase()];
+    }
+  }
+
+  return calcMoveDamage(attacker, defender, flippedField, movesById, enemyMoveIds, defenderTypes);
+}
