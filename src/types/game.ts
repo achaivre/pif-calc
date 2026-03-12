@@ -128,6 +128,12 @@ export interface PlayerPokemon {
    * Survives JSON export/import because it's just a number, not a UUID.
    */
   linkNumber?: number;
+  /**
+   * Current HP override (1 to computed max HP).
+   * When set below ⅓ max HP, abilities like Blaze/Torrent/Overgrow/Swarm activate.
+   * Omit (or set to computed max HP) for full health.
+   */
+  currentHp?: number;
 }
 
 /** One player's data: their name + their box */

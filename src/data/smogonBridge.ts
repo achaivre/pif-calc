@@ -212,7 +212,7 @@ export async function resolveTrainerPokemon(
 // ---------------------------------------------------------------------------
 
 async function buildSmogonPokemon(pp: PlayerPokemon): Promise<Pokemon> {
-  const { byId } = await loadSpecies();
+  const [{ byId }, abilitiesMap] = await Promise.all([loadSpecies(), loadAbilities()]);
   let displayName = 'Bulbasaur';
   let baseStats: SmogonStatSet;
   let types: string[];
@@ -243,13 +243,21 @@ async function buildSmogonPokemon(pp: PlayerPokemon): Promise<Pokemon> {
     }
   }
 
+  // smogon/calc's hasAbility() uses direct string comparison (case-sensitive).
+  // PIF stores ability IDs as ALL_CAPS (e.g. "BLAZE"), so we must resolve the
+  // real_name ("Blaze") from the abilities map before passing to smogon.
+  const abilityRealName = pp.ability
+    ? (abilitiesMap.get(pp.ability)?.real_name ?? pp.ability)
+    : pp.ability;
+
   return new Pokemon(GEN, displayName, {
     level: pp.level,
     nature: pp.nature,
-    ability: pp.ability,
+    ability: abilityRealName,
     item: pp.item,
     ivs: pp.ivs,
     evs: pp.evs,
+    curHP: pp.currentHp,
     overrides: { baseStats, types },
   });
 }

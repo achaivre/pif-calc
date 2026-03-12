@@ -4,9 +4,9 @@
  */
 import { useState, useEffect } from 'react';
 import type { PlayerPokemon, PifSpeciesData, SmogonStatSet } from '../../types/game';
-import { isFusion } from '../../types/game';
-import { loadSpecies, loadAbilities, loadTypes } from '../../data/loaders';
-import { calcFusionTypes, calcFusionStats, pifToSmogonStats } from '../../data/fusionCalc';
+import { isFusion, STAT_LABELS } from '../../types/game';
+import { loadSpecies, loadAbilities, loadTypes, loadMoves } from '../../data/loaders';
+import { calcFusionTypes, calcFusionStats, pifToSmogonStats, calcAllStats } from '../../data/fusionCalc';
 import TypeBadge from '../common/TypeBadge';
 import StatBar from '../common/StatBar';
 
@@ -21,9 +21,14 @@ interface AbilityInfo {
   isHidden: boolean;
 }
 
-interface LevelMove {
-  level: number;
+interface ResolvedMove {
   moveId: string;
+  level?: number;        // only for level-up moves
+  moveName: string;
+  bp: number;
+  category: 'Physical' | 'Special' | 'Status';
+  moveType: string;      // uppercase e.g. "FIRE"
+  description: string;
 }
 
 interface ResolvedInfo {
@@ -31,9 +36,8 @@ interface ResolvedInfo {
   types: string[];
   baseStats: SmogonStatSet;
   abilities: AbilityInfo[];
-  levelMoves: LevelMove[];       // from species moves array
-  tutorMoves: string[];
-  eggMoves: string[];
+  levelMoves: ResolvedMove[];
+  tutorMoves: ResolvedMove[];
   // Type effectiveness
   effectiveness: { type: string; mult: number }[];
 }
@@ -68,18 +72,40 @@ async function computeEffectiveness(
 // Resolve full info for a PlayerPokemon
 // ---------------------------------------------------------------------------
 
+function resolveMove(
+  moveId: string,
+  movesMap: Map<string, import('../../types/game').PifMoveData>,
+  level?: number
+): ResolvedMove {
+  const m = movesMap.get(moveId);
+  if (!m) return { moveId, level, moveName: moveId, bp: 0, category: 'Status', moveType: 'NORMAL', description: '' };
+  const category: 'Physical' | 'Special' | 'Status' =
+    m.category === 0 ? 'Physical' : m.category === 1 ? 'Special' : 'Status';
+  return {
+    moveId,
+    level,
+    moveName: m.real_name,
+    bp: m.base_damage,
+    category,
+    moveType: m.type.toUpperCase(),
+    description: m.real_description,
+  };
+}
+
 async function resolveInfo(pokemon: PlayerPokemon): Promise<ResolvedInfo | null> {
-  const { byId } = await loadSpecies();
-  const abilitiesMap = await loadAbilities();
+  const [{ byId }, abilitiesMap, movesMap] = await Promise.all([
+    loadSpecies(),
+    loadAbilities(),
+    loadMoves(),
+  ]);
 
   let displayName = '';
   let types: string[] = [];
   let baseStats: SmogonStatSet = { hp: 50, atk: 50, def: 50, spa: 50, spd: 50, spe: 50 };
   let rawAbilityIds: string[] = [];
   let rawHiddenAbilityIds: string[] = [];
-  let levelMoves: LevelMove[] = [];
-  let tutorMoves: string[] = [];
-  let eggMoves: string[] = [];
+  let rawLevelMoves: Array<[number, string]> = [];
+  let rawTutorMoves: string[] = [];
 
   if (isFusion(pokemon.speciesId)) {
     const head = byId.get(pokemon.speciesId.head);
@@ -91,14 +117,11 @@ async function resolveInfo(pokemon: PlayerPokemon): Promise<ResolvedInfo | null>
     types = t2 ? [t1.toUpperCase(), t2.toUpperCase()] : [t1.toUpperCase()];
     baseStats = calcFusionStats(head, body);
 
-    // Fusion inherits head abilities + body abilities
     rawAbilityIds = [...(head.abilities ?? []), ...(body.abilities ?? [])];
     rawHiddenAbilityIds = [...(head.hidden_abilities ?? []), ...(body.hidden_abilities ?? [])];
-
-    // Level moves from head (since head determines the learnset in PIF)
-    levelMoves = (head.moves ?? []).map(([lvl, id]) => ({ level: lvl, moveId: id }));
-    tutorMoves = [...(head.tutor_moves ?? []), ...(body.tutor_moves ?? [])];
-    eggMoves = [...(head.egg_moves ?? []), ...(body.egg_moves ?? [])];
+    rawLevelMoves = head.moves ?? [];
+    // De-duplicate tutor moves from both head and body
+    rawTutorMoves = Array.from(new Set([...(head.tutor_moves ?? []), ...(body.tutor_moves ?? [])]));
   } else {
     const sp = byId.get(pokemon.speciesId as string);
     if (!sp) return null;
@@ -110,9 +133,8 @@ async function resolveInfo(pokemon: PlayerPokemon): Promise<ResolvedInfo | null>
     baseStats = pifToSmogonStats(sp.base_stats);
     rawAbilityIds = sp.abilities ?? [];
     rawHiddenAbilityIds = sp.hidden_abilities ?? [];
-    levelMoves = (sp.moves ?? []).map(([lvl, id]) => ({ level: lvl, moveId: id }));
-    tutorMoves = sp.tutor_moves ?? [];
-    eggMoves = sp.egg_moves ?? [];
+    rawLevelMoves = sp.moves ?? [];
+    rawTutorMoves = sp.tutor_moves ?? [];
   }
 
   // Resolve ability info
@@ -130,6 +152,16 @@ async function resolveInfo(pokemon: PlayerPokemon): Promise<ResolvedInfo | null>
     });
   }
 
+  const levelMoves = rawLevelMoves
+    .map(([lvl, id]) => resolveMove(id, movesMap, lvl))
+    .sort((a, b) => (a.level ?? 0) - (b.level ?? 0));
+
+  // De-duplicate tutor moves, skip any already in level-up moves
+  const levelMoveIds = new Set(levelMoves.map(m => m.moveId));
+  const tutorMoves = rawTutorMoves
+    .filter((id, idx, arr) => arr.indexOf(id) === idx && !levelMoveIds.has(id))
+    .map(id => resolveMove(id, movesMap));
+
   const effectiveness = await computeEffectiveness(types);
 
   return {
@@ -137,9 +169,8 @@ async function resolveInfo(pokemon: PlayerPokemon): Promise<ResolvedInfo | null>
     types,
     baseStats,
     abilities,
-    levelMoves: levelMoves.sort((a, b) => a.level - b.level),
+    levelMoves,
     tutorMoves,
-    eggMoves,
     effectiveness,
   };
 }
@@ -166,6 +197,70 @@ function multLabel(mult: number): string {
 }
 
 // ---------------------------------------------------------------------------
+// Resolve summary (saved Pokemon data)
+// ---------------------------------------------------------------------------
+
+interface SummaryData {
+  abilityName: string;
+  abilityDesc: string;
+  savedMoves: ResolvedMove[];   // resolved from pokemon.moves[]
+  baseStats: SmogonStatSet;
+  computedStats: SmogonStatSet;
+}
+
+async function resolveSummary(
+  pokemon: PlayerPokemon,
+  baseStats: SmogonStatSet
+): Promise<SummaryData> {
+  const [abilitiesMap, movesMap] = await Promise.all([loadAbilities(), loadMoves()]);
+
+  const abilityEntry = pokemon.ability ? abilitiesMap.get(pokemon.ability) : undefined;
+  const abilityName = abilityEntry?.real_name ?? pokemon.ability ?? '';
+  const abilityDesc = abilityEntry?.real_description ?? '';
+
+  const savedMoves: ResolvedMove[] = (pokemon.moves ?? [])
+    .filter(Boolean)
+    .map(id => {
+      const m = movesMap.get(id);
+      if (!m) return { moveId: id, moveName: id, bp: 0, category: 'Status' as const, moveType: 'NORMAL', description: '' };
+      const category: 'Physical' | 'Special' | 'Status' =
+        m.category === 0 ? 'Physical' : m.category === 1 ? 'Special' : 'Status';
+      return { moveId: id, moveName: m.real_name, bp: m.base_damage, category, moveType: m.type.toUpperCase(), description: m.real_description };
+    });
+
+  const computedStats = calcAllStats(baseStats, pokemon.ivs, pokemon.evs, pokemon.level, pokemon.nature);
+
+  return { abilityName, abilityDesc, savedMoves, baseStats, computedStats };
+}
+
+// ---------------------------------------------------------------------------
+// Move row component
+// ---------------------------------------------------------------------------
+
+function MoveRow({ move, showLevel }: { move: ResolvedMove; showLevel?: boolean }) {
+  const catLabel = move.category === 'Physical' ? 'Phys' : move.category === 'Special' ? 'Spec' : 'Status';
+  const catClass = move.category === 'Physical' ? 'cat-phys' : move.category === 'Special' ? 'cat-spec' : 'cat-status';
+  return (
+    <div className="info-move-row">
+      <div className="info-move-row-main">
+        {showLevel && (
+          <span className="info-move-level">Lv.{move.level ?? '—'}</span>
+        )}
+        <TypeBadge type={move.moveType} small />
+        <span className={`damage-cat ${catClass}`}>{catLabel}</span>
+        <span className="info-move-name">{move.moveName}</span>
+        {move.category !== 'Status' && move.bp > 0 && (
+          <span className="damage-bp">BP {move.bp}</span>
+        )}
+      </div>
+      {move.description && (
+        <div className="info-move-desc">{move.description}</div>
+      )}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Main modal
 // ---------------------------------------------------------------------------
 
@@ -176,14 +271,23 @@ interface Props {
 
 export default function PokemonInfoModal({ pokemon, onClose }: Props) {
   const [info, setInfo] = useState<ResolvedInfo | null>(null);
+  const [summary, setSummary] = useState<SummaryData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<'type' | 'abilities' | 'moves'>('type');
+  const [tab, setTab] = useState<'summary' | 'type' | 'abilities' | 'moves'>('summary');
 
   useEffect(() => {
     setLoading(true);
+    setSummary(null);
     resolveInfo(pokemon).then(r => {
       setInfo(r);
-      setLoading(false);
+      if (r) {
+        resolveSummary(pokemon, r.baseStats).then(s => {
+          setSummary(s);
+          setLoading(false);
+        });
+      } else {
+        setLoading(false);
+      }
     });
   }, [pokemon]);
 
@@ -191,9 +295,16 @@ export default function PokemonInfoModal({ pokemon, onClose }: Props) {
     ? `${pokemon.nickname} (${info?.displayName ?? '…'})`
     : (info?.displayName ?? '…');
 
+  const TAB_LABELS: Record<typeof tab, string> = {
+    summary: 'Summary',
+    type: 'Type Chart',
+    abilities: 'Abilities',
+    moves: 'Learnset',
+  };
+
   return (
     <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="modal-box" style={{ maxWidth: 520 }}>
+      <div className="modal-box" style={{ maxWidth: 560 }}>
         <div className="modal-header">
           <div>
             <h2 className="modal-title">{title}</h2>
@@ -209,13 +320,13 @@ export default function PokemonInfoModal({ pokemon, onClose }: Props) {
 
         {/* Tabs */}
         <div className="player-tabs" style={{ padding: '4px 1rem 0', margin: 0, background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
-          {(['type', 'abilities', 'moves'] as const).map(t => (
+          {(['summary', 'type', 'abilities', 'moves'] as const).map(t => (
             <button
               key={t}
               className={`player-tab ${tab === t ? 'active' : ''}`}
               onClick={() => setTab(t)}
             >
-              {t === 'type' ? 'Type Chart' : t === 'abilities' ? 'Abilities' : 'Moves'}
+              {TAB_LABELS[t]}
             </button>
           ))}
         </div>
@@ -225,6 +336,93 @@ export default function PokemonInfoModal({ pokemon, onClose }: Props) {
 
           {!loading && !info && (
             <div className="error-msg">Could not load species data.</div>
+          )}
+
+          {/* ── Summary tab: actual saved Pokemon data ── */}
+          {!loading && info && summary && tab === 'summary' && (
+            <>
+              {/* Level / Nature / Ability / Item */}
+              <div className="editor-section">
+                <div className="summary-meta-grid">
+                  <div className="summary-meta-cell">
+                    <span className="field-label">Level</span>
+                    <span className="summary-meta-value">{pokemon.level}</span>
+                  </div>
+                  <div className="summary-meta-cell">
+                    <span className="field-label">Nature</span>
+                    <span className="summary-meta-value">{pokemon.nature || '—'}</span>
+                  </div>
+                  <div className="summary-meta-cell">
+                    <span className="field-label">Ability</span>
+                    <span className="summary-meta-value" title={summary.abilityDesc || undefined}>
+                      {summary.abilityName || '—'}
+                    </span>
+                  </div>
+                  <div className="summary-meta-cell">
+                    <span className="field-label">Item</span>
+                    <span className="summary-meta-value">{pokemon.item || '—'}</span>
+                  </div>
+                </div>
+                {summary.abilityDesc && (
+                  <p className="detail-description" style={{ marginTop: 4 }}>{summary.abilityDesc}</p>
+                )}
+              </div>
+
+              {/* Saved moves */}
+              <div className="editor-section">
+                <span className="field-label">Moves</span>
+                {summary.savedMoves.length === 0 ? (
+                  <div className="empty-msg">No moves saved.</div>
+                ) : (
+                  <div className="info-move-rows">
+                    {summary.savedMoves.map(m => (
+                      <MoveRow key={m.moveId} move={m} />
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Computed stats */}
+              <div className="editor-section">
+                <div className="editor-section-header">
+                  <span className="field-label">Stats</span>
+                  <span className="hp-display">
+                    <span className="hp-value">{summary.computedStats.hp}</span>
+                    <span className="hp-label">HP</span>
+                  </span>
+                </div>
+                <StatBar baseStats={info.baseStats} actualStats={summary.computedStats} nature={pokemon.nature} compact />
+              </div>
+
+              {/* EVs / IVs */}
+              <div className="editor-section">
+                <span className="field-label">EVs / IVs</span>
+                <div className="summary-stat-table">
+                  <div className="summary-stat-header">
+                    <span />
+                    {(Object.keys(STAT_LABELS) as (keyof typeof STAT_LABELS)[]).map(s => (
+                      <span key={s} className="summary-stat-col-label">{STAT_LABELS[s]}</span>
+                    ))}
+                  </div>
+                  <div className="summary-stat-row">
+                    <span className="summary-stat-row-label">EV</span>
+                    {(Object.keys(STAT_LABELS) as (keyof typeof STAT_LABELS)[]).map(s => (
+                      <span key={s} className={`summary-stat-val ${pokemon.evs[s] > 0 ? 'ev-nonzero' : ''}`}>
+                        {pokemon.evs[s]}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="summary-stat-row">
+                    <span className="summary-stat-row-label">IV</span>
+                    {(Object.keys(STAT_LABELS) as (keyof typeof STAT_LABELS)[]).map(s => (
+                      <span key={s} className={`summary-stat-val ${pokemon.ivs[s] < 31 ? 'iv-imperfect' : ''}`}>
+                        {pokemon.ivs[s]}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
           )}
 
           {!loading && info && tab === 'type' && (
@@ -278,12 +476,9 @@ export default function PokemonInfoModal({ pokemon, onClose }: Props) {
               {info.levelMoves.length > 0 && (
                 <div className="editor-section">
                   <span className="field-label">Level-up Moves</span>
-                  <div className="info-move-list">
-                    {info.levelMoves.map(({ level, moveId }) => (
-                      <span key={`${level}-${moveId}`} className="info-move-tag">
-                        <span className="info-move-level">Lv.{level}</span>
-                        {moveId}
-                      </span>
+                  <div className="info-move-rows">
+                    {info.levelMoves.map(m => (
+                      <MoveRow key={`${m.level}-${m.moveId}`} move={m} showLevel />
                     ))}
                   </div>
                 </div>
@@ -291,24 +486,14 @@ export default function PokemonInfoModal({ pokemon, onClose }: Props) {
               {info.tutorMoves.length > 0 && (
                 <div className="editor-section">
                   <span className="field-label">Tutor / TM Moves</span>
-                  <div className="info-move-list">
+                  <div className="info-move-rows">
                     {info.tutorMoves.map(m => (
-                      <span key={m} className="info-move-tag">{m}</span>
+                      <MoveRow key={m.moveId} move={m} />
                     ))}
                   </div>
                 </div>
               )}
-              {info.eggMoves.length > 0 && (
-                <div className="editor-section">
-                  <span className="field-label">Egg Moves</span>
-                  <div className="info-move-list">
-                    {info.eggMoves.map(m => (
-                      <span key={m} className="info-move-tag">{m}</span>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {info.levelMoves.length === 0 && info.tutorMoves.length === 0 && info.eggMoves.length === 0 && (
+              {info.levelMoves.length === 0 && info.tutorMoves.length === 0 && (
                 <div className="empty-msg">No move data available.</div>
               )}
             </>

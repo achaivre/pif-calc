@@ -303,14 +303,22 @@ export default function EnemyPanel() {
         <>
           <div className="section-divider" />
 
-          {/* Name + level + types */}
+          {/* Name + level + types + HP */}
           <div className="smogon-poke-header">
             <div>
               <h3 className="smogon-poke-name">{selectedEnemy.displayName}</h3>
               <span className="smogon-poke-level">Lv. {selectedEnemy.level}</span>
             </div>
-            <div className="enemy-poke-types">
-              {selectedEnemy.types.map(t => <TypeBadge key={t} type={t.toUpperCase()} />)}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
+              <div className="enemy-poke-types">
+                {selectedEnemy.types.map(t => <TypeBadge key={t} type={t.toUpperCase()} />)}
+              </div>
+              {computedStats && (
+                <div className="enemy-hp-badge">
+                  <span className="enemy-hp-badge-label">HP</span>
+                  <span className="enemy-hp-badge-value">{computedStats.hp}</span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -410,20 +418,13 @@ export default function EnemyPanel() {
             </div>
           </div>
 
-          {/* Stat bars + computed HP */}
+          {/* Stat bars */}
           <StatBar
             baseStats={selectedEnemy.baseStats}
             actualStats={computedStats ?? undefined}
             nature={effNature}
             compact
           />
-          {computedStats && (
-            <div className="hp-display">
-              <span className="field-label">HP</span>
-              <span className="hp-value">{computedStats.hp}</span>
-              <span className="hp-label">max HP</span>
-            </div>
-          )}
 
           {/* Moves */}
           {selectedEnemy.moves.length > 0 && (

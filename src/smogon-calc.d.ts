@@ -30,6 +30,7 @@ declare module '@smogon/calc' {
         item?: string;
         ivs?: Partial<StatsTable>;
         evs?: Partial<StatsTable>;
+        curHP?: number;
         boosts?: Partial<StatsTable>;
         overrides?: {
           baseStats?: StatsTable;

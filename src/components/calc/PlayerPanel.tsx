@@ -568,7 +568,7 @@ function PokemonEditorInline({ pokemon, onChange }: PokemonEditorInlineProps) {
             <span className="field-label">Stats</span>
             <span className="hp-display">
               <span className="hp-value">{computedStats.hp}</span>
-              <span className="hp-label">HP</span>
+              <span className="hp-label">max HP</span>
             </span>
           </div>
           <StatBar
@@ -577,6 +577,24 @@ function PokemonEditorInline({ pokemon, onChange }: PokemonEditorInlineProps) {
             nature={pokemon.nature}
             compact
           />
+          {/* Current HP slider — controls Blaze/Torrent/Overgrow/Swarm activation */}
+          <div className="current-hp-row">
+            <label className="field-label">Cur HP</label>
+            <input
+              type="range"
+              className="hp-slider"
+              min={1}
+              max={computedStats.hp}
+              value={pokemon.currentHp ?? computedStats.hp}
+              onChange={e => patch({ currentHp: Number(e.target.value) })}
+            />
+            <span className={`hp-cur-value ${(pokemon.currentHp ?? computedStats.hp) <= Math.floor(computedStats.hp / 3) ? 'hp-low' : ''}`}>
+              {pokemon.currentHp ?? computedStats.hp}/{computedStats.hp}
+            </span>
+            {pokemon.currentHp != null && (
+              <button className="link-btn" onClick={() => patch({ currentHp: undefined })}>Full</button>
+            )}
+          </div>
         </div>
       )}
 
