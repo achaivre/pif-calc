@@ -237,16 +237,18 @@ export async function loadTrainers(): Promise<PifTrainerData[]> {
   if (_trainers) return _trainers;
 
   const res = await fetch(`${import.meta.env.BASE_URL}data/trainers.json`);
-  const raw: Record<string, RawEntry> = await res.json();
+  const json = await res.json();
 
-  _trainers = [];
-
-  for (const [key, val] of Object.entries(raw)) {
-    if (!isNumericKey(key) || !val || '__ref__' in val) continue;
-    const data: PifTrainerData = val.__ivars__;
-    if (!data?.trainer_type) continue;
-    _trainers.push(data);
-  }
+  // New format: { trainers: [...] }
+  const arr: PifTrainerData[] = Array.isArray(json) ? json : (json.trainers ?? []);
+  // Deduplicate by id_number (the data has exact duplicate entries)
+  const seenIds = new Set<number>();
+  _trainers = arr.filter(t => {
+    if (!t?.trainer_type) return false;
+    if (seenIds.has(t.id_number)) return false;
+    seenIds.add(t.id_number);
+    return true;
+  });
 
   return _trainers;
 }
@@ -279,7 +281,22 @@ export function parseTrainerSpecies(species: string): ParsedSpecies {
 export async function loadExpertLeaders(): Promise<Record<string, ExpertLeaderEntry>> {
   if (_expertLeaders) return _expertLeaders;
   const res = await fetch(`${import.meta.env.BASE_URL}data/expert_leaders.json`);
-  _expertLeaders = await res.json() as Record<string, ExpertLeaderEntry>;
+  const json = await res.json();
+
+  // New format: { trainers: [...] } — key by trainer_type, use version 0
+  const arr: Array<{ trainer_type: string; real_name: string; version: number; pokemon: ExpertPokemonEntry[] }> =
+    Array.isArray(json) ? json : (json.trainers ?? []);
+
+  _expertLeaders = {};
+  for (const t of arr) {
+    if (!t?.trainer_type) continue;
+    const key = t.trainer_type;
+    // Keep version 0 (first encounter); don't overwrite with rematch versions
+    if (!_expertLeaders[key] || t.version === 0) {
+      _expertLeaders[key] = { real_name: t.real_name, pokemon: t.pokemon ?? [] };
+    }
+  }
+
   return _expertLeaders;
 }
 

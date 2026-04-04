@@ -23,6 +23,7 @@ export interface PifSpeciesData {
   egg_moves?: string[];
   abilities: string[];
   hidden_abilities?: string[];
+  evolutions?: Array<[string, string, unknown, unknown]>; // [targetId, method, param, flag]
 }
 
 export interface PifMoveData {
@@ -78,8 +79,9 @@ export interface PifTrainerData {
   trainer_type: string;
   real_name: string;
   version: number;
-  items: string[];
+  items?: string[];
   pokemon: PifTrainerPokemon[];
+  location?: string;
   real_lose_text?: string;
 }
 

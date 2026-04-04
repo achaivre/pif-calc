@@ -4,7 +4,7 @@
  */
 import { useState, useEffect, useRef } from 'react';
 import { useAppState } from '../../context/AppContext';
-import { loadSpecies, loadMoves, getMoveById } from '../../data/loaders';
+import { loadSpecies, loadMoves, getMoveById, loadAbilities, loadItems } from '../../data/loaders';
 import { calcFusionStats, calcFusionTypes, pifToSmogonStats, calcAllStats } from '../../data/fusionCalc';
 import { runCalc } from '../../data/smogonBridge';
 import type {
@@ -13,6 +13,7 @@ import type {
   SmogonStatSet,
   MoveCalcResult,
   SpeciesId,
+  PifItemData,
 } from '../../types/game';
 import { isFusion, DEFAULT_IVS, DEFAULT_EVS, NATURES, STAT_LABELS } from '../../types/game';
 import TypeBadge from '../common/TypeBadge';
@@ -186,6 +187,78 @@ function MoveSearch({
 }
 
 // ---------------------------------------------------------------------------
+// Item search combobox
+// ---------------------------------------------------------------------------
+
+function ItemSearch({
+  value,
+  onSelect,
+}: {
+  value: string;
+  onSelect: (realName: string, description: string) => void;
+}) {
+  const [query, setQuery] = useState(value);
+  const [suggestions, setSuggestions] = useState<PifItemData[]>([]);
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => { setQuery(value); }, [value]);
+
+  useEffect(() => {
+    if (!query.trim() || query.length < 2) { setSuggestions([]); return; }
+    loadItems().then(map => {
+      const q = query.toLowerCase();
+      const res: PifItemData[] = [];
+      for (const it of map.values()) {
+        if (it.real_name.toLowerCase().includes(q) || it.id.toLowerCase().includes(q)) {
+          res.push(it);
+          if (res.length >= 15) break;
+        }
+      }
+      setSuggestions(res.sort((a, b) => a.real_name.localeCompare(b.real_name)));
+    });
+  }, [query]);
+
+  useEffect(() => {
+    const h = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', h);
+    return () => document.removeEventListener('mousedown', h);
+  }, []);
+
+  return (
+    <div className="species-search" ref={ref}>
+      <input
+        className="pif-input pif-input--sm"
+        placeholder="Item…"
+        value={query}
+        onChange={e => { setQuery(e.target.value); setOpen(true); }}
+        onFocus={() => setOpen(true)}
+      />
+      {open && suggestions.length > 0 && (
+        <ul className="species-dropdown">
+          {suggestions.map(it => (
+            <li key={it.id} className="species-dropdown-item"
+              onMouseDown={() => {
+                onSelect(it.real_name, it.real_description ?? '');
+                setQuery(it.real_name);
+                setOpen(false);
+              }}
+            >
+              <span>{it.real_name}</span>
+              {it.real_description && (
+                <span style={{ opacity: 0.5, fontSize: '0.62rem', marginLeft: 4 }}>{it.real_description.slice(0, 50)}</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Damage result row
 // ---------------------------------------------------------------------------
 
@@ -304,15 +377,24 @@ function PokemonEditorInline({ pokemon, onChange }: PokemonEditorInlineProps) {
     types: string[];
     baseStats: SmogonStatSet;
     displayName: string;
-    abilities: string[];
+    abilities: Array<{ id: string; name: string; description: string }>;
   } | null>(null);
+  const [itemDescription, setItemDescription] = useState('');
   const [headName, setHeadName] = useState('');
   const [bodyName, setBodyName] = useState('');
   const [isFusionMode, setIsFusionMode] = useState(isFusion(pokemon.speciesId));
 
   useEffect(() => {
     async function resolve() {
-      const { byId } = await loadSpecies();
+      const [{ byId }, abilitiesMap] = await Promise.all([loadSpecies(), loadAbilities()]);
+
+      function resolveAbilities(ids: string[]): Array<{ id: string; name: string; description: string }> {
+        return [...new Set(ids)].map(id => {
+          const ab = abilitiesMap.get(id);
+          return { id, name: ab?.real_name ?? id, description: ab?.real_description ?? '' };
+        });
+      }
+
       if (isFusion(pokemon.speciesId)) {
         const head = byId.get(pokemon.speciesId.head);
         const body = byId.get(pokemon.speciesId.body);
@@ -322,12 +404,12 @@ function PokemonEditorInline({ pokemon, onChange }: PokemonEditorInlineProps) {
             types: t2 ? [t1, t2] : [t1],
             baseStats: calcFusionStats(head, body),
             displayName: `${head.real_name} / ${body.real_name}`,
-            abilities: [
+            abilities: resolveAbilities([
               ...(head.abilities ?? []),
               ...(head.hidden_abilities ?? []),
               ...(body.abilities ?? []),
               ...(body.hidden_abilities ?? []),
-            ],
+            ]),
           });
           setHeadName(head.real_name);
           setBodyName(body.real_name);
@@ -339,7 +421,7 @@ function PokemonEditorInline({ pokemon, onChange }: PokemonEditorInlineProps) {
             types: sp.type2 ? [sp.type1, sp.type2] : [sp.type1],
             baseStats: pifToSmogonStats(sp.base_stats),
             displayName: sp.real_name,
-            abilities: [...(sp.abilities ?? []), ...(sp.hidden_abilities ?? [])],
+            abilities: resolveAbilities([...(sp.abilities ?? []), ...(sp.hidden_abilities ?? [])]),
           });
         }
       } else {
@@ -348,6 +430,22 @@ function PokemonEditorInline({ pokemon, onChange }: PokemonEditorInlineProps) {
     }
     resolve();
   }, [pokemon.speciesId]);
+
+  // Load item description when item changes (handles save-imported IDs like HARDSTONE)
+  useEffect(() => {
+    if (!pokemon.item) { setItemDescription(''); return; }
+    loadItems().then(map => {
+      // Try real_name match first, then ID match
+      for (const it of map.values()) {
+        if (it.real_name.toLowerCase() === pokemon.item.toLowerCase() ||
+            it.id.toLowerCase() === pokemon.item.toLowerCase()) {
+          setItemDescription(it.real_description ?? '');
+          return;
+        }
+      }
+      setItemDescription('');
+    });
+  }, [pokemon.item]);
 
   function patch(partial: Partial<PlayerPokemon>) {
     onChange({ ...pokemon, ...partial });
@@ -474,40 +572,46 @@ function PokemonEditorInline({ pokemon, onChange }: PokemonEditorInlineProps) {
         </div>
       </div>
 
-      {/* Ability + Item */}
-      <div className="editor-row two-col">
-        <div>
-          <label className="field-label">Ability</label>
-          {speciesData && speciesData.abilities.length > 0 ? (
-            <select
-              className="pif-select"
-              value={pokemon.ability}
-              onChange={e => patch({ ability: e.target.value })}
-            >
-              <option value="">—</option>
-              {speciesData.abilities.map(a => (
-                <option key={a} value={a}>{a}</option>
-              ))}
-            </select>
-          ) : (
-            <input
-              className="pif-input pif-input--sm"
-              placeholder="Ability…"
-              value={pokemon.ability}
-              onChange={e => patch({ ability: e.target.value })}
-            />
-          )}
-        </div>
-        <div>
-          <label className="field-label">Item</label>
+      {/* Ability */}
+      <div className="editor-row">
+        <label className="field-label">Ability</label>
+        {speciesData && speciesData.abilities.length > 0 ? (
+          <select
+            className="pif-select"
+            value={pokemon.ability}
+            onChange={e => patch({ ability: e.target.value })}
+          >
+            <option value="">—</option>
+            {speciesData.abilities.map(a => (
+              <option key={a.id} value={a.id} title={a.description}>{a.name}</option>
+            ))}
+          </select>
+        ) : (
           <input
             className="pif-input pif-input--sm"
-            placeholder="Item…"
-            value={pokemon.item}
-            onChange={e => patch({ item: e.target.value })}
+            placeholder="Ability…"
+            value={pokemon.ability}
+            onChange={e => patch({ ability: e.target.value })}
           />
-        </div>
+        )}
       </div>
+      {/* Ability description */}
+      {(() => {
+        const desc = speciesData?.abilities.find(
+          a => a.id === pokemon.ability || a.name.toLowerCase() === pokemon.ability?.toLowerCase()
+        )?.description;
+        return desc ? <p className="detail-description">{desc}</p> : null;
+      })()}
+
+      {/* Item */}
+      <div className="editor-row">
+        <label className="field-label">Item</label>
+        <ItemSearch
+          value={pokemon.item ?? ''}
+          onSelect={(name, desc) => { patch({ item: name }); setItemDescription(desc); }}
+        />
+      </div>
+      {itemDescription && <p className="detail-description">{itemDescription}</p>}
 
       {/* EVs */}
       <div className="editor-section">
@@ -685,6 +789,31 @@ export default function PlayerPanel() {
     dispatch({ type: 'SET_ACTIVE_POKEMON', playerIdx: tab, pokemon: blank });
   }
 
+  function toggleParty(p: PlayerPokemon) {
+    const party = state.parties[tab];
+    const inParty = party.includes(p.id);
+    if (inParty) {
+      const slotIdx = party.findIndex(id => id === p.id);
+      if (slotIdx >= 0) dispatch({ type: 'SET_PARTY_SLOT', playerIdx: tab, slotIdx: slotIdx as 0|1|2|3|4|5, pokemonId: null });
+    } else {
+      const emptySlot = party.findIndex(id => id === null);
+      if (emptySlot < 0) return;
+      dispatch({ type: 'SET_PARTY_SLOT', playerIdx: tab, slotIdx: emptySlot as 0|1|2|3|4|5, pokemonId: p.id });
+      // Auto-add soul-linked pokemon for other players
+      if (p.linkNumber != null) {
+        ([0, 1, 2] as const).forEach(i => {
+          if (i === tab) return;
+          const linked = state.players[i].box.find(b => b.linkNumber === p.linkNumber);
+          if (!linked) return;
+          const otherParty = state.parties[i];
+          if (otherParty.includes(linked.id)) return;
+          const otherEmpty = otherParty.findIndex(id => id === null);
+          if (otherEmpty >= 0) dispatch({ type: 'SET_PARTY_SLOT', playerIdx: i, slotIdx: otherEmpty as 0|1|2|3|4|5, pokemonId: linked.id });
+        });
+      }
+    }
+  }
+
   // Get display name for a box Pokemon
   function getBoxDisplayName(p: PlayerPokemon): string {
     if (p.nickname) return p.nickname;
@@ -717,17 +846,29 @@ export default function PlayerPanel() {
           <div className="box-picker">
             <label className="field-label">Load from Box</label>
             <div className="box-list">
-              {player.box.map(p => (
-                <button
-                  key={p.id}
-                  className={`box-pick-btn ${activePokemon?.id === p.id ? 'active' : ''}`}
-                  onClick={() => loadFromBox(p)}
-                  title={p.linkNumber != null ? `Soul-link #${p.linkNumber} — loads linked Pokemon for other players` : undefined}
-                >
-                  {getBoxDisplayName(p)}
-                  {p.linkNumber != null && <span className="link-indicator">#{p.linkNumber}</span>}
-                </button>
-              ))}
+              {player.box.map(p => {
+                const party = state.parties[tab];
+                const inParty = party.includes(p.id);
+                const partyFull = party.filter(Boolean).length >= 6;
+                return (
+                  <div key={p.id} className="box-pick-row">
+                    <button
+                      className={`box-pick-btn ${activePokemon?.id === p.id ? 'active' : ''}`}
+                      onClick={() => loadFromBox(p)}
+                      title={p.linkNumber != null ? `Soul-link #${p.linkNumber}` : undefined}
+                    >
+                      {getBoxDisplayName(p)}
+                      {p.linkNumber != null && <span className="link-indicator">#{p.linkNumber}</span>}
+                    </button>
+                    <button
+                      className={`box-party-star ${inParty ? 'in-party' : ''}`}
+                      title={inParty ? 'Remove from party' : partyFull ? 'Party full' : 'Add to party'}
+                      disabled={!inParty && partyFull}
+                      onClick={() => toggleParty(p)}
+                    >★</button>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}

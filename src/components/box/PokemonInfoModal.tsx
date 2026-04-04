@@ -3,7 +3,7 @@
  * Shows: type weaknesses/resistances, abilities + descriptions, level-up moves.
  */
 import { useState, useEffect } from 'react';
-import type { PlayerPokemon, PifSpeciesData, SmogonStatSet } from '../../types/game';
+import type { PlayerPokemon, PifSpeciesData, SmogonStatSet, SpeciesId } from '../../types/game';
 import { isFusion, STAT_LABELS } from '../../types/game';
 import { loadSpecies, loadAbilities, loadTypes, loadMoves } from '../../data/loaders';
 import { calcFusionTypes, calcFusionStats, pifToSmogonStats, calcAllStats } from '../../data/fusionCalc';
@@ -31,6 +31,11 @@ interface ResolvedMove {
   description: string;
 }
 
+interface EvolveOption {
+  label: string;
+  newSpeciesId: SpeciesId;
+}
+
 interface ResolvedInfo {
   displayName: string;
   types: string[];
@@ -40,6 +45,7 @@ interface ResolvedInfo {
   tutorMoves: ResolvedMove[];
   // Type effectiveness
   effectiveness: { type: string; mult: number }[];
+  evolveOptions: EvolveOption[];
 }
 
 // ---------------------------------------------------------------------------
@@ -107,34 +113,56 @@ async function resolveInfo(pokemon: PlayerPokemon): Promise<ResolvedInfo | null>
   let rawLevelMoves: Array<[number, string]> = [];
   let rawTutorMoves: string[] = [];
 
+  let headSp: PifSpeciesData | undefined;
+  let bodySp: PifSpeciesData | undefined;
+  let singleSp: PifSpeciesData | undefined;
+
   if (isFusion(pokemon.speciesId)) {
-    const head = byId.get(pokemon.speciesId.head);
-    const body = byId.get(pokemon.speciesId.body);
-    if (!head || !body) return null;
+    headSp = byId.get(pokemon.speciesId.head);
+    bodySp = byId.get(pokemon.speciesId.body);
+    if (!headSp || !bodySp) return null;
 
-    displayName = `${head.real_name} / ${body.real_name}`;
-    const [t1, t2] = calcFusionTypes(head, body);
+    displayName = `${headSp.real_name} / ${bodySp.real_name}`;
+    const [t1, t2] = calcFusionTypes(headSp, bodySp);
     types = t2 ? [t1.toUpperCase(), t2.toUpperCase()] : [t1.toUpperCase()];
-    baseStats = calcFusionStats(head, body);
+    baseStats = calcFusionStats(headSp, bodySp);
 
-    rawAbilityIds = [...(head.abilities ?? []), ...(body.abilities ?? [])];
-    rawHiddenAbilityIds = [...(head.hidden_abilities ?? []), ...(body.hidden_abilities ?? [])];
-    rawLevelMoves = head.moves ?? [];
+    rawAbilityIds = [...(headSp.abilities ?? []), ...(bodySp.abilities ?? [])];
+    rawHiddenAbilityIds = [...(headSp.hidden_abilities ?? []), ...(bodySp.hidden_abilities ?? [])];
+    rawLevelMoves = headSp.moves ?? [];
     // De-duplicate tutor moves from both head and body
-    rawTutorMoves = Array.from(new Set([...(head.tutor_moves ?? []), ...(body.tutor_moves ?? [])]));
+    rawTutorMoves = Array.from(new Set([...(headSp.tutor_moves ?? []), ...(bodySp.tutor_moves ?? [])]));
   } else {
-    const sp = byId.get(pokemon.speciesId as string);
-    if (!sp) return null;
+    singleSp = byId.get(pokemon.speciesId as string);
+    if (!singleSp) return null;
 
-    displayName = sp.real_name;
-    types = sp.type2
-      ? [sp.type1.toUpperCase(), sp.type2.toUpperCase()]
-      : [sp.type1.toUpperCase()];
-    baseStats = pifToSmogonStats(sp.base_stats);
-    rawAbilityIds = sp.abilities ?? [];
-    rawHiddenAbilityIds = sp.hidden_abilities ?? [];
-    rawLevelMoves = sp.moves ?? [];
-    rawTutorMoves = sp.tutor_moves ?? [];
+    displayName = singleSp.real_name;
+    types = singleSp.type2
+      ? [singleSp.type1.toUpperCase(), singleSp.type2.toUpperCase()]
+      : [singleSp.type1.toUpperCase()];
+    baseStats = pifToSmogonStats(singleSp.base_stats);
+    rawAbilityIds = singleSp.abilities ?? [];
+    rawHiddenAbilityIds = singleSp.hidden_abilities ?? [];
+    rawLevelMoves = singleSp.moves ?? [];
+    rawTutorMoves = singleSp.tutor_moves ?? [];
+  }
+
+  // Build evolve options (only forward evolutions that exist in the dex)
+  const evolveOptions: EvolveOption[] = [];
+  if (headSp && bodySp && isFusion(pokemon.speciesId)) {
+    for (const [targetId] of (headSp.evolutions ?? [])) {
+      const tgt = byId.get(targetId as string);
+      if (tgt) evolveOptions.push({ label: `Head → ${tgt.real_name}`, newSpeciesId: { head: targetId as string, body: pokemon.speciesId.body } });
+    }
+    for (const [targetId] of (bodySp.evolutions ?? [])) {
+      const tgt = byId.get(targetId as string);
+      if (tgt) evolveOptions.push({ label: `Body → ${tgt.real_name}`, newSpeciesId: { head: pokemon.speciesId.head, body: targetId as string } });
+    }
+  } else if (singleSp) {
+    for (const [targetId] of (singleSp.evolutions ?? [])) {
+      const tgt = byId.get(targetId as string);
+      if (tgt) evolveOptions.push({ label: `→ ${tgt.real_name}`, newSpeciesId: targetId as string });
+    }
   }
 
   // Resolve ability info
@@ -172,6 +200,7 @@ async function resolveInfo(pokemon: PlayerPokemon): Promise<ResolvedInfo | null>
     levelMoves,
     tutorMoves,
     effectiveness,
+    evolveOptions,
   };
 }
 
@@ -267,9 +296,10 @@ function MoveRow({ move, showLevel }: { move: ResolvedMove; showLevel?: boolean 
 interface Props {
   pokemon: PlayerPokemon;
   onClose: () => void;
+  onEvolve?: (newSpeciesId: SpeciesId) => void;
 }
 
-export default function PokemonInfoModal({ pokemon, onClose }: Props) {
+export default function PokemonInfoModal({ pokemon, onClose, onEvolve }: Props) {
   const [info, setInfo] = useState<ResolvedInfo | null>(null);
   const [summary, setSummary] = useState<SummaryData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -422,6 +452,24 @@ export default function PokemonInfoModal({ pokemon, onClose }: Props) {
                   </div>
                 </div>
               </div>
+
+              {/* Evolve */}
+              {onEvolve && info.evolveOptions.length > 0 && (
+                <div className="editor-section">
+                  <span className="field-label">Evolve</span>
+                  <div className="evolve-btn-row">
+                    {info.evolveOptions.map((opt, i) => (
+                      <button
+                        key={i}
+                        className="btn btn-primary evolve-btn"
+                        onClick={() => onEvolve(opt.newSpeciesId)}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </>
           )}
 

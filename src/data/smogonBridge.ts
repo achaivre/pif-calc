@@ -153,13 +153,16 @@ export async function resolveTrainerPokemon(
   // Hard Mode: 10% level boost only (IVs/EVs come from trainer data)
   const level = Math.ceil(effectiveTp.level * 1.1);
 
-  const ivs: SmogonStatSet = effectiveTp.iv
-    ? { hp: effectiveTp.iv.HP, atk: effectiveTp.iv.ATTACK, def: effectiveTp.iv.DEFENSE, spa: effectiveTp.iv.SPECIAL_ATTACK, spd: effectiveTp.iv.SPECIAL_DEFENSE, spe: effectiveTp.iv.SPEED }
+  // ev/iv may be partial objects (some keys missing) — default missing to 0/31
+  const safeIv = effectiveTp.iv as Record<string, number> | undefined;
+  const ivs: SmogonStatSet = safeIv && Object.keys(safeIv).length > 0
+    ? { hp: safeIv.HP ?? 31, atk: safeIv.ATTACK ?? 31, def: safeIv.DEFENSE ?? 31, spa: safeIv.SPECIAL_ATTACK ?? 31, spd: safeIv.SPECIAL_DEFENSE ?? 31, spe: safeIv.SPEED ?? 31 }
     : tier === 'elite' ? { ...ELITE_IVS } : { ...DEFAULT_IVS };
 
+  const safeEv = effectiveTp.ev as Record<string, number> | undefined;
   let evs: SmogonStatSet;
-  if (effectiveTp.ev) {
-    evs = { hp: effectiveTp.ev.HP, atk: effectiveTp.ev.ATTACK, def: effectiveTp.ev.DEFENSE, spa: effectiveTp.ev.SPECIAL_ATTACK, spd: effectiveTp.ev.SPECIAL_DEFENSE, spe: effectiveTp.ev.SPEED };
+  if (safeEv && Object.keys(safeEv).length > 0) {
+    evs = { hp: safeEv.HP ?? 0, atk: safeEv.ATTACK ?? 0, def: safeEv.DEFENSE ?? 0, spa: safeEv.SPECIAL_ATTACK ?? 0, spd: safeEv.SPECIAL_DEFENSE ?? 0, spe: safeEv.SPEED ?? 0 };
   } else if (tier === 'elite') {
     evs = generateEliteEVs(baseStats);
   } else {

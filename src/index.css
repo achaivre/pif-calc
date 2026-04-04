@@ -282,6 +282,27 @@ button {
 .box-pick-btn:hover { border-color: var(--accent); color: var(--text); }
 .box-pick-btn.active { background: var(--accent2); color: #fff; border-color: var(--accent2); }
 
+.box-pick-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.box-party-star {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.box-party-star:hover:not(:disabled) { border-color: #f9a825; color: #f9a825; }
+.box-party-star.in-party { background: #f9a825; color: #000; border-color: #f9a825; }
+.box-party-star:disabled { opacity: 0.35; cursor: not-allowed; }
+
 .new-poke-btn {
   background: transparent;
   border: 1px dashed var(--border);
@@ -978,6 +999,23 @@ button {
   line-height: 1.4;
 }
 
+.evolve-btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.evolve-btn {
+  font-size: 0.82rem;
+  padding: 0.35rem 0.9rem;
+}
+
+.set-level-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .box-add-btn {
   background: transparent;
   border: 2px dashed var(--border);
@@ -1080,6 +1118,8 @@ button {
   gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
+.banner-berry-toggle { font-size: 0.68rem; margin-left: auto; opacity: 0.6; }
+.banner-berry-toggle.active { opacity: 1; background: #f5e6c8; color: #7a5c2e; border-color: #c9a96e; }
 
 .damage-banner-title {
   font-size: 0.78rem;
@@ -1132,6 +1172,18 @@ button {
   white-space: nowrap;
 }
 
+.banner-speed {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 5px;
+  border-radius: 3px;
+  margin-bottom: 4px;
+  letter-spacing: 0.01em;
+}
+.speed-first  { background: rgba(102,187,106,0.15); color: #66bb6a; }
+.speed-second { background: rgba(239,83,80,0.12);   color: #ef5350; }
+.speed-tie    { background: rgba(255,255,255,0.06);  color: var(--text-muted); }
+
 .banner-moves {
   display: flex;
   flex-direction: column;
@@ -1153,6 +1205,7 @@ button {
 
 .banner-move-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
 .banner-damage { font-family: monospace; color: var(--text-muted); }
+.banner-berry { font-family: monospace; font-size: 0.68rem; color: #8b6f47; background: #f5e6c8; border-radius: 3px; padding: 1px 4px; white-space: nowrap; }
 .banner-ko-text { font-size: 0.68rem; padding: 1px 4px; border-radius: 3px; white-space: nowrap; }
 .banner-ko-text.ko { background: var(--accent); color: #fff; font-weight: 700; }
 .banner-ko-text.twohko { background: var(--warn); color: #000; font-weight: 700; }
@@ -1727,3 +1780,314 @@ button {
 
 .summary-stat-val.ev-nonzero { color: var(--accent2); font-weight: 700; }
 .summary-stat-val.iv-imperfect { color: var(--warn); }
+
+/* ============================================================
+   BACKEND SETTINGS (BoxPage)
+   ============================================================ */
+
+.backend-settings {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.backend-url-input {
+  flex: 1;
+  min-width: 200px;
+  max-width: 340px;
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+.backend-hint {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* Save import status messages */
+.save-import-msg {
+  font-size: 0.78rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+.save-import-success {
+  background: rgba(76, 175, 80, 0.15);
+  color: var(--success);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+.save-import-error {
+  background: rgba(233, 69, 96, 0.15);
+  color: var(--accent);
+  border: 1px solid rgba(233, 69, 96, 0.3);
+}
+
+/* ============================================================
+   MATCHUP SUGGESTIONS (EnemyPanel)
+   ============================================================ */
+
+.matchup-section {
+  margin-top: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 6px;
+}
+
+.matchup-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.matchup-toggle {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.78rem;
+  padding: 2px 0;
+  flex: 1;
+  text-align: left;
+  transition: color 0.15s;
+}
+.matchup-toggle:hover { color: var(--text); }
+
+.matchup-filter-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.matchup-filter-toggle input { cursor: pointer; }
+
+.matchup-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 6px;
+}
+
+.matchup-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 5px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 0.72rem;
+  min-width: 0;
+}
+
+.matchup-rank {
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  width: 18px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.matchup-player-tag {
+  background: var(--accent2);
+  color: #fff;
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.matchup-info {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+.matchup-name {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+.matchup-types {
+  display: flex;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.matchup-scores {
+  display: flex;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.matchup-score-badge {
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.matchup-score-badge.score-great { background: #1b5e20; color: #a5d6a7; }
+.matchup-score-badge.score-ok    { background: #e65100; color: #ffe0b2; }
+.matchup-score-badge.score-weak  { background: #b71c1c; color: #ffcdd2; }
+
+/* Enhanced matchup item layout */
+.matchup-item--clickable {
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+}
+.matchup-item--clickable:hover {
+  background: var(--surface-hover, #2a2a2a);
+  border-color: var(--accent);
+}
+
+.matchup-name-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+.matchup-name-row .matchup-name {
+  display: inline;
+  flex-shrink: 1;
+}
+.matchup-name-row .matchup-types {
+  margin-top: 0;
+  flex-shrink: 0;
+}
+
+.matchup-best-move {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 2px;
+  flex-wrap: wrap;
+}
+
+.matchup-move-name {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.matchup-learn-tag {
+  color: var(--text-muted);
+  font-size: 0.64rem;
+}
+
+.matchup-dmg {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+.matchup-dmg.score-great { background: #1b5e20; color: #a5d6a7; }
+.matchup-dmg.score-ok    { background: #e65100; color: #ffe0b2; }
+.matchup-dmg.score-weak  { background: #b71c1c; color: #ffcdd2; }
+
+.matchup-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  flex-wrap: wrap;
+}
+
+.matchup-rec {
+  color: var(--text-muted);
+  font-size: 0.64rem;
+}
+
+.matchup-survival {
+  font-size: 0.64rem;
+  font-weight: 600;
+}
+.surv-ok     { color: #66bb6a; }
+.surv-bad    { color: #ef5350; }
+.surv-immune { color: #ffd700; font-weight: 700; }
+
+.matchup-hint {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* Custom enemy builder */
+.custom-enemy-builder {
+  margin-bottom: 6px;
+}
+
+.custom-enemy-form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 6px 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.custom-enemy-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+/* ---------------------------------------------------------------------------
+   Save history dropdown (BoxPage)
+   --------------------------------------------------------------------------- */
+
+.save-history {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  max-height: 280px;
+  overflow-y: auto;
+  margin-top: 6px;
+  padding: 4px;
+}
+
+.save-history-empty {
+  padding: 10px 12px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.save-history-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 7px 10px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  text-align: left;
+  border-radius: 4px;
+  transition: background 0.12s;
+}
+.save-history-item:hover { background: var(--surface-hover); }
+
+.save-history-date {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.save-history-meta {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}

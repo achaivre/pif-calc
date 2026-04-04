@@ -61,6 +61,38 @@ export function calcFusionTypes(
 }
 
 /**
+ * Triple fusion stats: floor((s1 + s2 + s3) / 3) per stat.
+ * Types: one type from each species' primary type (up to 3 distinct).
+ */
+export function calcTripleFusionStats(
+  s1: PifSpeciesData,
+  s2: PifSpeciesData,
+  s3: PifSpeciesData
+): SmogonStatSet {
+  const a = s1.base_stats, b = s2.base_stats, c = s3.base_stats;
+  return {
+    hp:  Math.floor((a.HP  + b.HP  + c.HP)  / 3),
+    atk: Math.floor((a.ATTACK  + b.ATTACK  + c.ATTACK)  / 3),
+    def: Math.floor((a.DEFENSE + b.DEFENSE + c.DEFENSE) / 3),
+    spa: Math.floor((a.SPECIAL_ATTACK  + b.SPECIAL_ATTACK  + c.SPECIAL_ATTACK)  / 3),
+    spd: Math.floor((a.SPECIAL_DEFENSE + b.SPECIAL_DEFENSE + c.SPECIAL_DEFENSE) / 3),
+    spe: Math.floor((a.SPEED + b.SPEED + c.SPEED) / 3),
+  };
+}
+
+export function calcTripleFusionTypes(
+  s1: PifSpeciesData,
+  s2: PifSpeciesData,
+  s3: PifSpeciesData
+): string[] {
+  const types: string[] = [];
+  for (const t of [s1.type1, s2.type1, s3.type1]) {
+    if (t && !types.includes(t)) types.push(t);
+  }
+  return types;
+}
+
+/**
  * Determine which abilities the fusion can have.
  * Returns an array of PIF ability IDs (strings).
  * Follows PIF convention: head's abilities first, then body's.

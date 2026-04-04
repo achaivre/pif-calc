@@ -95,3 +95,15 @@ export async function readJSONFile(file: File): Promise<string> {
     reader.readAsText(file);
   });
 }
+
+// ---------------------------------------------------------------------------
+// Backend URL (for save file import and other backend calls)
+// ---------------------------------------------------------------------------
+
+export function saveBackendUrl(url: string): void {
+  save('backendUrl', url);
+}
+
+export function loadBackendUrl(): string {
+  return load<string>('backendUrl', 'http://localhost:5000');
+}
