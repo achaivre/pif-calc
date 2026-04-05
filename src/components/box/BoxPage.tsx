@@ -336,15 +336,22 @@ function PlayerBox({
     e.target.value = '';
   }
 
-  async function fetchSaveHistory() {
-    setHistoryLoading(true);
-    try {
-      const res = await fetch(`${backendUrl}/api/saves/${encodeURIComponent(player.name)}`);
-      if (res.ok) setSaveHistory(await res.json());
-      else setSaveHistory([]);
-    } catch { setSaveHistory([]); }
-    finally { setHistoryLoading(false); }
+async function fetchSaveHistory() {
+  setHistoryLoading(true);
+  try {
+    const res = await fetch(
+      `${backendUrl}/api/saves/${encodeURIComponent(player.name)}`,
+      { headers: { 'ngrok-skip-browser-warning': 'true' } }
+    );
+    if (res.ok) setSaveHistory(await res.json());
+    else setSaveHistory([]);
+  } catch (err) {
+    console.error('Save history fetch failed:', err);
+    setSaveHistory([]);
+  } finally {
+    setHistoryLoading(false);
   }
+}
 
   // Auto-refresh history whenever the dropdown opens or player changes
   useEffect(() => {
@@ -379,7 +386,7 @@ function PlayerBox({
 
       const res = await fetch(
         `${backendUrl}/api/parse-save?player_name=${encodeURIComponent(player.name)}`,
-        { method: 'POST', body: formData }
+        { method: 'POST', body: formData, headers: {'ngrok-skip-browser-warning': 'true'} }
       );
 
       if (!res.ok) {
@@ -403,7 +410,7 @@ function PlayerBox({
     setSaveImportMsg('');
     setSaveImportError('');
     try {
-      const res = await fetch(`${backendUrl}/api/saves/${encodeURIComponent(player.name)}/${encodeURIComponent(saveId)}`);
+      const res = await fetch(`${backendUrl}/api/saves/${encodeURIComponent(player.name)}/${encodeURIComponent(saveId)}`, {headers: {'ngrok-skip-browser-warning': 'true'}});
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json() as SaveResponse;
       await applySaveData(data, label);
