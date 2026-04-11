@@ -1844,6 +1844,60 @@ button {
   gap: 8px;
 }
 
+/* Two-button row for matchup modes */
+.matchup-btns-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.matchup-mode-btn {
+  flex: 1;
+  padding: 7px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-panel);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.matchup-mode-btn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text);
+  border-color: var(--accent);
+}
+.matchup-mode-btn--active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.matchup-mode-btn--active:hover:not(:disabled) {
+  background: var(--accent);
+  color: #fff;
+}
+.matchup-mode-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.matchup-active-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  padding: 4px 6px;
+  background: var(--bg-hover);
+  border-radius: 4px;
+}
+
 .matchup-toggle {
   background: none;
   border: none;

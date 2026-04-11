@@ -627,14 +627,19 @@ interface EnhancedEntry {
   recItem: string;
 }
 
-function MatchupSuggestions({ team }: { team: ResolvedTrainerPokemon[] }) {
+type MatchupMode = 'team' | 'vs' | null;
+
+function MatchupSuggestions({ team, selectedEnemy }: { team: ResolvedTrainerPokemon[]; selectedEnemy: ResolvedTrainerPokemon | null }) {
   const { state, dispatch } = useAppState();
-  const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState<MatchupMode>(null);
   const [results, setResults] = useState<EnhancedEntry[]>([]);
   const [levelupOnly, setLevelupOnly] = useState(false);
 
+  // The target enemy set depends on mode
+  const computeTarget = mode === 'vs' && selectedEnemy ? [selectedEnemy] : team;
+
   useEffect(() => {
-    if (!open || team.length === 0) { setResults([]); return; }
+    if (!mode || computeTarget.length === 0) { setResults([]); return; }
     setResults([]); // clear while recomputing
 
     async function compute() {
@@ -643,7 +648,7 @@ function MatchupSuggestions({ team }: { team: ResolvedTrainerPokemon[] }) {
 
       // Pre-compute each enemy's actual stats and move data
       const enemyData = await Promise.all(
-        team.map(async e => {
+        computeTarget.map(async e => {
           const eStat = calcAllStats(e.baseStats, e.ivs, e.evs, e.level, e.nature);
           const moveInfos: Array<{ bp: number; type: string; category: number }> = [];
           for (const mName of e.moves) {
@@ -712,8 +717,8 @@ function MatchupSuggestions({ team }: { team: ResolvedTrainerPokemon[] }) {
               if (pct >= 100) ohkos++;
             }
             // Self-destruct moves only worth it if they OHKO every enemy
-            if (isSelfDestruct && ohkos < team.length) continue;
-            const avg = totalDmg / team.length;
+            if (isSelfDestruct && ohkos < computeTarget.length) continue;
+            const avg = totalDmg / computeTarget.length;
             // Bonus for guaranteed OHKOs — each OHKO is worth extra 50% to the score
             const score = avg + (ohkos / team.length) * 50;
             if (score > bestScore) {
@@ -754,7 +759,7 @@ function MatchupSuggestions({ team }: { team: ResolvedTrainerPokemon[] }) {
           const immuneBonus = worstIncomingPct === 0 ? 100 : 0;
           const movePotential = bestMove ? bestMove.avgDmgPct / 50 : 0;
           const survivalMult = worstIncomingPct < 100 ? 1.2 : 0.7;
-          const typeScore = scoreMatchup(types, team.map(e => ({ types: e.types })));
+          const typeScore = scoreMatchup(types, computeTarget.map(e => ({ types: e.types })));
           const totalScore = immuneBonus + (movePotential * 3 + typeScore.offenseScore + typeScore.resilienceScore) / 5 * survivalMult;
 
           entries.push({
@@ -770,7 +775,7 @@ function MatchupSuggestions({ team }: { team: ResolvedTrainerPokemon[] }) {
     }
 
     compute().catch(console.error);
-  }, [open, team, state.players, state.activePlayerTab, levelupOnly]);
+  }, [mode, team, selectedEnemy, state.players, state.activePlayerTab, levelupOnly]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (team.length === 0) return null;
   if (state.players[state.activePlayerTab].box.length === 0) return null;
@@ -780,71 +785,90 @@ function MatchupSuggestions({ team }: { team: ResolvedTrainerPokemon[] }) {
     dispatch({ type: 'SET_ACTIVE_POKEMON', playerIdx: entry.playerIdx, pokemon: { ...entry.pokemon } });
   }
 
+  const targetLabel = mode === 'vs' && selectedEnemy
+    ? selectedEnemy.displayName
+    : 'Whole Team';
+
   return (
     <div className="matchup-section">
-      <div className="matchup-header">
-        <button className="matchup-toggle" onClick={() => setOpen(o => !o)}>
-          {open ? '▾' : '▸'} Best Matchups from Boxes
+      <div className="matchup-btns-row">
+        <button
+          className={`matchup-mode-btn ${mode === 'team' ? 'matchup-mode-btn--active' : ''}`}
+          onClick={() => setMode(m => m === 'team' ? null : 'team')}
+          title="Find best box Pokemon against the whole enemy team"
+        >
+          {mode === 'team' ? '▾' : '▸'} Best vs Whole Team
         </button>
-        {open && (
-          <label className="matchup-filter-toggle">
-            <input
-              type="checkbox"
-              checked={levelupOnly}
-              onChange={e => setLevelupOnly(e.target.checked)}
-            />
-            Level-up only
-          </label>
-        )}
+        <button
+          className={`matchup-mode-btn ${mode === 'vs' ? 'matchup-mode-btn--active' : ''}`}
+          onClick={() => setMode(m => m === 'vs' ? null : 'vs')}
+          disabled={!selectedEnemy}
+          title={selectedEnemy ? `Find best box Pokemon against ${selectedEnemy.displayName}` : 'Click a Pokemon on the team first'}
+        >
+          {mode === 'vs' ? '▾' : '▸'} Best vs {selectedEnemy?.displayName ?? '(select enemy)'}
+        </button>
       </div>
-      {open && (
-        <div className="matchup-list">
-          {results.length === 0 ? (
-            <div className="empty-msg">Computing…</div>
-          ) : (
-            results.map((r, i) => (
-              <div
-                key={r.pokemon.id}
-                className="matchup-item matchup-item--clickable"
-                onClick={() => loadPokemon(r)}
-                title="Click to load into calc"
-              >
-                <span className="matchup-rank">#{i + 1}</span>
-                <div className="matchup-info">
-                  <div className="matchup-name-row">
-                    <span className="matchup-name">{r.displayName}</span>
-                    <div className="matchup-types">
-                      {r.types.map(t => <TypeBadge key={t} type={t} small />)}
+      {mode && (
+        <>
+          <div className="matchup-active-label">
+            Showing best matchups vs <strong>{targetLabel}</strong>
+            <label className="matchup-filter-toggle" style={{ marginLeft: 'auto' }}>
+              <input
+                type="checkbox"
+                checked={levelupOnly}
+                onChange={e => setLevelupOnly(e.target.checked)}
+              />
+              Level-up only
+            </label>
+          </div>
+          <div className="matchup-list">
+            {results.length === 0 ? (
+              <div className="empty-msg">Computing…</div>
+            ) : (
+              results.map((r, i) => (
+                <div
+                  key={r.pokemon.id}
+                  className="matchup-item matchup-item--clickable"
+                  onClick={() => loadPokemon(r)}
+                  title="Click to load into calc"
+                >
+                  <span className="matchup-rank">#{i + 1}</span>
+                  <div className="matchup-info">
+                    <div className="matchup-name-row">
+                      <span className="matchup-name">{r.displayName}</span>
+                      <div className="matchup-types">
+                        {r.types.map(t => <TypeBadge key={t} type={t} small />)}
+                      </div>
                     </div>
-                  </div>
-                  {r.bestMove && (
-                    <div className="matchup-best-move">
-                      <TypeBadge type={r.bestMove.moveType} small />
-                      <span className="matchup-move-name">{r.bestMove.name}</span>
-                      <span className="matchup-learn-tag">({r.bestMove.learnMethod})</span>
-                      <span className={`matchup-dmg ${r.bestMove.avgDmgPct >= 100 ? 'score-great' : r.bestMove.avgDmgPct >= 50 ? 'score-ok' : 'score-weak'}`}>
-                        {r.bestMove.ohkoCount === team.length
-                          ? 'OHKOs all'
-                          : r.bestMove.ohkoCount > 0
-                            ? `OHKOs ${r.bestMove.ohkoCount}/${team.length} (~${Math.round(r.bestMove.avgDmgPct)}% avg)`
-                            : `~${Math.round(r.bestMove.avgDmgPct)}% avg`}
+                    {r.bestMove && (
+                      <div className="matchup-best-move">
+                        <TypeBadge type={r.bestMove.moveType} small />
+                        <span className="matchup-move-name">{r.bestMove.name}</span>
+                        <span className="matchup-learn-tag">({r.bestMove.learnMethod})</span>
+                        <span className={`matchup-dmg ${r.bestMove.avgDmgPct >= 100 ? 'score-great' : r.bestMove.avgDmgPct >= 50 ? 'score-ok' : 'score-weak'}`}>
+                          {r.bestMove.ohkoCount === computeTarget.length
+                            ? 'OHKOs all'
+                            : r.bestMove.ohkoCount > 0
+                              ? `OHKOs ${r.bestMove.ohkoCount}/${computeTarget.length} (~${Math.round(r.bestMove.avgDmgPct)}% avg)`
+                              : `~${Math.round(r.bestMove.avgDmgPct)}% avg`}
+                        </span>
+                      </div>
+                    )}
+                    <div className="matchup-footer">
+                      <span className="matchup-rec">{r.recNature} + {r.recItem}</span>
+                      <span className={`matchup-survival ${r.worstIncomingPct === 0 ? 'surv-immune' : r.worstIncomingPct < 100 ? 'surv-ok' : 'surv-bad'}`}>
+                        {r.worstIncomingPct === 0
+                          ? 'Immune to all moves!'
+                          : `takes ~${Math.round(r.worstIncomingPct)}%${r.worstIncomingPct >= 100 ? ' (OHKO risk)' : ''}`}
                       </span>
                     </div>
-                  )}
-                  <div className="matchup-footer">
-                    <span className="matchup-rec">{r.recNature} + {r.recItem}</span>
-                    <span className={`matchup-survival ${r.worstIncomingPct === 0 ? 'surv-immune' : r.worstIncomingPct < 100 ? 'surv-ok' : 'surv-bad'}`}>
-                      {r.worstIncomingPct === 0
-                        ? 'Immune to all moves!'
-                        : `takes ~${Math.round(r.worstIncomingPct)}%${r.worstIncomingPct >= 100 ? ' (OHKO risk)' : ''}`}
-                    </span>
                   </div>
                 </div>
-              </div>
-            ))
-          )}
-          <div className="matchup-hint">Click any entry to load into calc</div>
-        </div>
+              ))
+            )}
+            <div className="matchup-hint">Click any entry to load into calc</div>
+          </div>
+        </>
       )}
     </div>
   );
@@ -1034,7 +1058,7 @@ export default function EnemyPanel() {
             ))}
           </div>
 
-          <MatchupSuggestions team={state.resolvedEnemyTeam} />
+          <MatchupSuggestions team={state.resolvedEnemyTeam} selectedEnemy={selectedEnemy} />
         </>
       )}
 
